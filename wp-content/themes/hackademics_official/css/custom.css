@@ -1,0 +1,575 @@
+.img_list_course {
+	height: 12em;
+	border: none;
+}
+
+.img_list_course>img {
+	height: 12em;
+	width: 100%;
+}
+
+
+/* cut from style.css */
+
+.img_list_course:hover .shadow_txt {
+	/* height:100%; */
+}
+
+.list_menu_other li {
+	height: auto;
+}
+
+.oval_img {
+	width: 15rem;
+	height: 15rem;
+}
+
+.img_partner > a > img {
+	max-width: 100%;
+	max-height: 85%;
+}
+
+.list_partner {
+	height: auto;
+}
+
+
+/* .menu-item-has-children:hover ~ li.active > a {
+	background-color: #263C8F;
+	padding-left: 59px;
+}
+
+.menu-item-has-children:hover ~ li.active {
+	background: #263C8F !important;
+} */
+
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+	width: 100%;
+}
+
+
+/* .sub-menu > li.current-menu-item.active > a {
+	padding-left: 59px !important;
+}
+
+.sub-menu > li.current-menu-item.active > a:hover {
+	padding-left: 10px !important;
+}
+ */
+
+img.media-object.tuyen-dung-viec-lam {
+	max-width: 100% !important;
+	margin-bottom: 1rem;
+	max-height: 8rem;
+}
+
+img.media-object.doi-tac-viec-lam {
+	width: 80px !important;
+	max-height: 40px;
+	overflow: hidden;
+}
+
+img.media-object.news {
+	max-width: 170px !important;
+	max-height: 80px;
+	overflow: hidden;
+}
+
+.banner_right > a > img {
+	width: 100%;
+	max-width: 100%;
+}
+
+ul.blog-meta > li {
+	display: inline;
+}
+
+.box_list_promotion {
+	margin-bottom: 1rem;
+}
+
+.banner_right {
+	margin-top: 0px;
+}
+
+@media (max-width: 1160px) {
+	.box_purpose img {
+		display: none;
+	}
+}
+
+@media (max-width: 960px) {
+	.menu_lifestudent,
+	.menu_post {
+		display: none;
+	}
+}
+
+img.partner-slider {
+	margin: 10rem 4rem !important;
+	height: 6rem;
+}
+
+.special-tag {
+	background: #5bc0de;
+	padding: 5px 10px;
+	color: #fff;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.new-tag {
+	background: #5CB85C;
+	padding: 5px 10px;
+	color: #fff;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.pickup-tag {
+	background: #0275D8;
+	padding: 5px 10px;
+	color: #fff;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.recommend-tag {
+	background: #D9534F;
+	padding: 5px 10px;
+	color: #fff;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.trendding-tag {
+	background: darkorange;
+	padding: 5px 10px;
+	color: #fff;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+
+/* .btn_more_detail, .btn_price_detail{
+	border-radius: 0;
+} */
+
+.btn_price_detail {
+	width: 100%;
+	border: none;
+}
+
+.tt_course .description {
+	-webkit-column-rule: #123;
+	-moz-column-rule: #123;
+	-o-column-rule: #123;
+	column-rule: #123;
+	margin-left: 1rem;
+}
+
+.register-form {
+	margin: 0 auto;
+}
+
+.tag_img {
+	top: 2px;
+	right: 0;
+}
+
+.course-description {
+	margin-left: 2rem;
+}
+
+@media (min-width: 1160px) {
+	.main-nav {
+		margin-top: 0;
+	}
+	.logo {
+		top: 1.5rem;
+	}
+}
+
+.box-nhan-su {
+	width: 8rem;
+	height: 8rem;
+	overflow: hidden;
+}
+
+.list_menu_other li p {
+	padding-left: 2rem;
+	color: #fff;
+	line-height: 40px;
+	font-weight: bold;
+	display: block;
+	text-transform: uppercase;
+}
+
+.list_menu_other li.title {
+	list-style: none;
+	margin-bottom: 5px;
+	background: #2baae2;
+	height: 40px;
+}
+
+.title_detail {
+	margin-bottom: 2rem;
+}
+
+.img-partner img {
+	max-width: 100%;
+	height: 90px;
+	padding: 1rem;
+}
+
+.tag_noibat h3 {
+	margin-top: 1rem;
+}
+
+.qa {
+	margin-bottom: 2rem !important;
+}
+
+.title_manifesto img {
+	height: 42px !important;
+}
+
+.sticky-logged {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	/* padding-top: 1rem; */
+	z-index: 1002;
+}
+
+.sticky-moblie-logged {
+	position: fixed;
+	top: 3rem;
+	left: 0;
+	right: 0;
+	padding-top: 2rem;
+	background-color: #263C8F !important;
+	z-index: 1000;
+}
+
+.sticky-guest {
+	position: fixed;
+	top: 1rem;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	padding-top: 1rem;
+}
+
+.sticky-mobile-guest {
+	position: fixed;
+	top: 0;
+	z-index: 1000;
+	left: 0;
+	right: 0;
+	background-color: #263C8F !important;
+}
+
+.white-background {
+	background-color: #fff;
+}
+
+.required {
+	color: red;
+}
+
+.sticky-logo {
+	position: fixed;
+	top: 1rem;
+	
+	z-index: 1003;
+}
+
+.sticky-logo-guest {
+	position: fixed;
+	top: 0;
+	left: 14rem;
+	right: 0;
+	z-index: 1001;
+	padding: 1rem;
+	height: 6rem;
+}
+
+.sticky-logo-mobile-guest {
+	display: none;
+}
+
+.iframe_map iframe {
+	pointer-events: none;
+}
+
+/* .csvc {
+	margin-bottom: 5rem;
+} */
+
+.wpcf7 * {
+	margin-bottom: 1rem;
+}
+
+a {
+	text-decoration: none !important;
+}
+
+#partner-btn * {
+	text-align: center;
+}
+
+#partner-btn {
+	display: block;
+	position: absolute;
+	bottom: 30px;
+	left: 2rem;
+	right: 2rem;
+}
+.partner-description{
+	display: block;
+	margin-bottom: 60px;
+}
+
+#adminbar{
+	position: absolute !important;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 1 !important;
+}
+
+.site-title{
+	text-align: center;
+	display: inline-block;
+}
+
+#myTab li:hover, #myTab li:focus, #myTab li a:hover, #myTab li a:focus{
+	background-color: #eee;
+}
+.tab_detail {
+	border: 1px solid #ccc;
+	border-top: none;
+	margin-top: 1rem;
+}
+#myTabContent {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+.nav > li > a {
+	position: relative;
+	display: block;
+	padding: 5px 5px;
+}
+.sticky-tab{
+	position: fixed;
+	top: 5rem;
+	background-color: white;
+	width: 55%;
+	z-index: 1002;
+}
+
+#course-btn * {
+	text-align: center;
+}
+
+#course-btn {
+	display: block;
+	position: absolute;
+	bottom: 30px;
+	left: 2rem;
+	right: 2rem;
+}
+.course-list-description{
+	display: block;
+	margin-bottom: 60px;
+}
+@media (min-width: 768px) {
+	.current_page_parent,  .current_page_ancestor, .current_page_parent a,  .current_page_ancestor a{
+		border: 1px solid #ccc;
+		border-bottom: none;
+	}
+}
+
+.carousel-inner {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	min-height: 250px;
+	max-height: 400px;
+}
+
+.title_mothod span {
+	display: table-cell;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 2rem;
+}
+
+.partner {
+	background: #fff;
+	padding-bottom: 30px;
+}
+
+.method{
+	background-color: #39C;
+	color: #fff;
+	padding-top: 2rem;
+	/* padding-bottom: 1rem; */
+}
+.box_medthod{
+	margin-top: 2rem;
+}
+.method .title_body{
+	text-align: center;
+	border-bottom: 2px solid #fff;
+	padding-bottom: 2rem;
+}
+
+.title_mothod span.icon_method{
+	display: block;
+	color: #fff;
+	font-size: 6rem;
+	width: 10rem;
+	height: 10rem;
+	/* line-height: 96px; */
+	margin: 0 auto;
+	position: relative;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	text-align: center;
+	vertical-align: middle;
+	}
+
+.title_mothod .txt_title_modthod {
+	display: block;
+	font-size: 2rem;
+	font-weight: 500;
+	text-align: center;
+	text-transform: uppercase;
+	padding: 1rem;
+}
+
+.box_medthod:after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 22px;
+	right: 4px;
+	width: 0;
+	height: 0;
+	border-top: 26px solid transparent;
+	border-bottom: 26px solid transparent;
+	border-left: 26px solid #39C;
+}
+
+.box_medthod:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 18px;
+	right: 0;
+	width: 0;
+	height: 0;
+	border-top: 30px solid transparent;
+	border-bottom: 30px solid transparent;
+	border-left: 30px solid #fff;
+}
+.row > .box_medthod:last-child:before {
+	display: none;
+}
+.box_medthod > h5{
+	font-size: 1.5rem;
+	/* text-align: center; */
+}
+ @media (max-width:768px){ 
+	.box_medthod:before {
+		display: none;
+	}
+}
+.list_method > ul{
+	padding-left: 2rem;
+}
+.list_method > ul > li{
+	text-align: justify;
+	text-justify: inter-word;
+}
+
+.list_method > ul > li > a{
+	color: #fff;
+	font-weight: bold;
+}
+
+.co_so_dao_tao {
+	position: relative;
+	width: 35rem;
+	padding: 8px;
+	background-color: #FFF;
+	z-index: 11;
+	top: 1rem;
+	left: 1rem;
+}
+ @media (max-width:500px){
+	.co_so_dao_tao {
+		position: relative;
+		width: 26   rem;
+		padding: 8px;
+		background-color: #FFF;
+		z-index: 10001;
+		top: 0rem;
+		left: 1rem;
+	}
+}
+
+.img_partner {
+	text-align: center;
+}
+.list_menu_other li a {
+	padding-left: 45px;
+	color: #fff;
+	line-height: 35px;
+	display: block;
+	padding-right: 5px;
+}
+
+.breadcrumb{
+	border-radius: 0;
+}
+
+#SkypeButton_Call_meobongzz_1_paraElement {
+	margin-top: -0.8rem;
+}
+
+.course-description > ul > li > ul{
+	margin-left: 4rem;
+}
+
+.course-description > ul{
+	margin-left: 2rem;
+}
+
+.box_medthod > a{
+	color: #fff;
+	text-align: center;
+}
+.box_medthod > p{
+	color: #fff;
+	/* margin-top: 4rem; */
+	text-align: center;
+	padding-bottom: 1rem;
+}
+.huong-dan ul {
+	margin-left: 2rem;
+	list-style-type: none;
+}
+
+.method-detail-link{
+	color: #fff;
+	font-weight: bold;
+}
+
+.list_method {
+    padding-bottom: 3rem;
+}

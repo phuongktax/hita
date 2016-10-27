@@ -1,0 +1,259 @@
+nav {
+    display: block;
+    padding-top: 1rem;
+}
+
+.menu {
+    display: block;
+    margin: 0;
+}
+
+.menu li a i {
+    display: block;
+    font-weight: normal;
+    font-size: 12px;
+    font-style: normal;
+}
+
+.menu li a {
+    display: block;
+    padding: 10px 15px;
+    font-weight: bold;
+    border-left: 1px solid #fff;
+    text-align: center;
+}
+
+.menu li.active ul li a {
+    color: #797979;
+    background: #fff;
+}
+
+.menu ul {
+    display: none;
+    margin: 0;
+    padding: 0;
+    width: 220px;
+    position: absolute;
+    top: 41px;
+    left: 0px;
+    background: #ffffff;
+    border: 1px solid #ccc;
+}
+.main-nav{
+        background: #fff;
+    }
+.menu ul li {
+    display: block;
+    float: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu ul li a {
+    font-size: 13px;
+    font-weight: normal;
+    display: block;
+    color: #797979;
+    border-left: 3px solid #ffffff;
+    background: #ffffff;
+    line-height: 30px;
+    border-bottom: 1px solid #ccc;
+}
+
+.menu li:hover > ul {
+    display: block;
+}
+
+.menu ul ul {
+    left: 149px;
+    top: 0px;
+}
+
+.mobile-menu {
+    display: none;
+    width: 100%;
+    padding: 11px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.mobile-menu:hover,
+.mobile-menu:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
+.menu li ul li a {
+    padding-left: 10px !important;
+}
+
+@media (min-width: 1160px) {
+    .menu li.active a, ul li.current-menu-parent a {
+        border: 1px solid #ccc;
+        border-bottom: none;
+    }
+    .menu li.active ul li a {
+        border-right: none;
+        border-top: none;
+        border-left: none;
+        border-bottom: 1px solid #ccc;
+    }
+    .menu li {
+        display: inline-block;
+        position: relative;
+        z-index: 100;
+        float: left;
+    }
+    .menu li ul li a {
+        height: 50px;
+        text-align: left;
+    }
+    .menu li.menu_contact a {
+        border-right: 1px solid #fff;
+    }
+    .menu {
+        float: right;
+    }
+
+}
+
+@media (min-width: 1024px) and (max-width: 1159px) {
+    #logo{
+        height: 5rem;
+    }
+    .main-nav{
+        border-bottom: 1px solid #ccc;
+    }
+    .menu li.active a, li.current-page-ancestor a {
+        border: 1px solid #ccc;
+        border-bottom: none;
+    }
+    .menu li.active ul li a {
+        border-right: none;
+        border-top: none;
+        border-left: none;
+        border-bottom: 1px solid #ccc;
+    }
+    .menu li {
+        display: inline-block;
+        position: relative;
+        z-index: 100;
+        float: left;
+    }
+    .menu li ul li a {
+        height: 50px;
+        text-align: left;
+    }
+    .menu li.menu_contact a {
+        border-right: 1px solid #fff;
+    }
+    .menu {
+        float: right;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    #logo{
+        height: 4rem;
+    }
+    .main-nav{
+        border-bottom: 1px solid #ccc;
+    }
+    .menu li.active a, li.current-page-ancestor {
+        border: 1px solid #ccc;
+        border-bottom: none;
+    }
+    .menu li.active ul li a {
+        border-right: none;
+        border-top: none;
+        border-left: none;
+        border-bottom: 1px solid #ccc;
+    }
+    .menu li {
+        display: inline-block;
+        position: relative;
+        z-index: 100;
+    }
+    .menu li ul li a {
+        height: 50px;
+        text-align: left;
+    }
+    .menu li.menu_contact a {
+        border-right: 1px solid #fff;
+    }
+    .menu {
+        float: right;
+    }
+    .menu li a{
+        padding: 10px 10px;
+    }
+}
+@media (max-width: 767px) {
+        .main-nav{
+        background:#263c8f;
+        margin-top: 0;
+    }
+
+    .menu {
+        display: none;
+        margin-bottom: 1rem;
+    }
+    nav {
+        margin: 0;
+        background: none;
+        padding-top: 0;
+    }
+
+    .menu li a {
+        color: #fff;
+    }
+    .menu li a:hover,
+    .menu li:hover > a,
+    .menu li.active a {
+        color: #ffffff;
+        background-color: #1f2d62;
+        text-decoration: none;
+    }
+    .menu ul li a:hover,
+    .menu ul li:hover > a {
+        background: #f0f0f0;
+        border-left: 3px solid #1f2d62;
+        color: #797979;
+    }
+    .menu li.menu_home {
+        border-top: 1px solid #fff;
+    }
+    .menu li a {
+        color: #fff;
+        border: 1px solid #fff;
+    }
+    .mainWrap {
+        width: auto;
+        padding: 50px 20px;
+    }
+    .mobile-menu {
+        display: block;
+    }
+
+    .menu li {
+        display: block;
+        margin: 0;
+    }
+    .menu ul {
+        display: block;
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+    .menu ul ul {
+        left: 0;
+    }
+
+    #logo{
+        height: 4rem;
+        margin-bottom: 2rem;
+    }
+}

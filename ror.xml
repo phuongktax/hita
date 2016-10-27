@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:ror="http://rorweb.com/0.1/" >
+<channel>
+  <title>ROR Sitemap for http://hackademicshanoi.vn/</title>
+  <link>http://hackademicshanoi.vn/</link>
+
+<item>
+     <link>http://hackademicshanoi.vn/</link>
+     <title>Học lập trình chuyên nghiệp và thực tiễn</title>
+     <description>Đào tạo lập trình chuyên nghiệp và thực tiễn. Hack your passion, code your life.</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>0</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/huong-dan/</link>
+     <title>Hướng dẫn - Hackademics Hanoi</title>
+     <description>Trang chủ
+Hướng dẫn
+Hướng dẫn đăng ký học
+Đăng ký học thế nào ?</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/chuong-trinh-dao-tao/</link>
+     <title>Chương trình đào tạo - Hackademics Hanoi</title>
+     <description>Hack Your Passion, Code Your Life!</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/</link>
+     <title>Tuyển Dụng và Việc Làm - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/</link>
+     <title>Đối Tác Việc Làm - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-ngu/</link>
+     <title>Đội Ngũ</title>
+     <description>Đội ngũ đến từ các trường đại học uy tín của Vietnam và các kỹ sư lâu năm kinh nghiệm làm việc với Nhật Bản.</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/lien-he/</link>
+     <title>Liên hệ - Hackademics Hanoi</title>
+     <description> Công ty Cổ Phần Công nghệ và đào tạo Hackademics Hanoi</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/vtdvn/</link>
+     <title>VTDVN - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/beetsoft/</link>
+     <title>BEETSOFT - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/v-mio-system-jsc/</link>
+     <title>V-Mio System JSC - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/2nf/</link>
+     <title>Công ty TNHH Phần mềm 2NF - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/codelovers-vietnam/</link>
+     <title>CodeLovers Việt Nam - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/hblab/</link>
+     <title>Công ty cổ phần HBLAB - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/ielove-viet-nam/</link>
+     <title>Công ty IELOVE VIỆT NAM - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/doi-tac-viec-lam/jvb/</link>
+     <title>Công ty cổ phần JVB - Hackademics Hanoi</title>
+     <description>đối tác việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>1</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/chuong-trinh-dao-tao/xay-dung-he-thong-ung-dung-doanh-nghiepthuong-mai-voi-java-java-ee/</link>
+     <title>Xây dựng hệ thống ứng dụng doanh nghiệp/thương mại với Java (Java EE) Hackademics Hanoi</title>
+     <description>Xây dựng hệ thống ứng dụng doanh nghiệp/thương mại với Java (Java EE)</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/java/</link>
+     <title>java - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/lap-trinh/</link>
+     <title>lập trình - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/chuong-trinh-dao-tao/lap-trinh-java-co-ban-va-nang-cao/</link>
+     <title>Lập trình JAVA cơ bản và nâng cao Hackademics Hanoi</title>
+     <description>Lập trình JAVA cơ bản và nâng cao</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/chuong-trinh-dao-tao/lap-trinh-ung-dung-ios-voi-objective-c/</link>
+     <title>Lập trình ứng dụng iOS với Objective-C Hackademics Hanoi</title>
+     <description>Lập trình ứng dụng iOS với Objective-C</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/app/</link>
+     <title>app - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/ios/</link>
+     <title>iOS - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/chuong-trinh-dao-tao/phat-trien-ung-dungdich-vu-nen-internet-voi-android/</link>
+     <title>Phát triển ứng dụng/dịch vụ nền Internet với Android Hackademics Hanoi</title>
+     <description>Phát triển ứng dụng/dịch vụ nền Internet với Android</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/androi/</link>
+     <title>androi - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/web/</link>
+     <title>web - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/chuong-trinh-dao-tao/phat-trien-phan-mem-nen-tang-web-voi-phpmysql/</link>
+     <title>Phát triển phần mềm nền tảng web với PHP&amp;amp;MySQL Hackademics Hanoi</title>
+     <description>Phát triển phần mềm nền tảng web với PHP&amp;amp;MySQL</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/mysql/</link>
+     <title>mysql - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/php/</link>
+     <title>php - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/phien-dich-vien-tieng-nhat-nganh-it-japanese-translator-n2/</link>
+     <title>Phiên Dịch Viên Tiếng Nhật Ngành IT - Japanese Translator N2 - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/it/</link>
+     <title>IT - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/n2/</link>
+     <title>N2 - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/tieng-nhat/</link>
+     <title>tiếng Nhật - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/java-developer-lap-trinh-vien-java/</link>
+     <title>Java Developer - Lập Trình Viên Java - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/lap-trinh-vien-php-php-developer/</link>
+     <title>Lập Trình Viên PHP - PHP Developer - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/android-developer-lap-trinh-vien-android/</link>
+     <title>Android Developer - Lập Trình Viên Android - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/brse-ky-su-cau-noi/</link>
+     <title>BrSE - Kỹ Sư Cầu Nối - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/brse/</link>
+     <title>BrSE - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/ki-su/</link>
+     <title>Kĩ sư - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/lap-trinh-cobol-2/</link>
+     <title>Lập trình COBOL - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/cobol/</link>
+     <title>COBOL - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/ky-su-cau-noi-brse/</link>
+     <title>Kỹ sư cầu nối (BrSE) - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/lap-trinh-vien-java-2/</link>
+     <title>Lập trình viên Java - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/truong-nhom-lap-trinh-php/</link>
+     <title>Trưởng Nhóm lập trình PHP - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/lap-trinh-web/</link>
+     <title>lập trình web - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/senior-ios-developer/</link>
+     <title>Senior iOS Developer - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/page/2/</link>
+     <title>Tuyển Dụng và Việc Làm - Page 2 of 2 - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/ky-su-cau-noi/</link>
+     <title>Kỹ sư cầu nối - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/ky-su-cau-noi/</link>
+     <title>Kỹ sư cầu nối - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/test/</link>
+     <title>test - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/android/</link>
+     <title>android - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/net/</link>
+     <title>.NET - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tu-khoa/tester/</link>
+     <title>tester - Hackademics Hanoi</title>
+     <description>từ khóa</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/?partner_id=283</link>
+     <title>Tuyển Dụng và Việc Làm - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/?partner_id=299</link>
+     <title>Tuyển Dụng và Việc Làm - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/?partner_id=357</link>
+     <title>Tuyển Dụng và Việc Làm - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/?partner_id=509</link>
+     <title>Tuyển Dụng và Việc Làm - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/giang-vien/nguyen-ba-hai/</link>
+     <title>Nguyễn Bá Hải - Hackademics Hanoi</title>
+     <description>đội ngũ giảng viên</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/giang-vien/nguyen-huu-kien/</link>
+     <title>Nguyễn Hữu Kiên - Hackademics Hanoi</title>
+     <description>đội ngũ giảng viên</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/nhan-su/nguyen-thi-phuong/</link>
+     <title>Nguyễn Thị Phương - Trưởng phòng Sales &amp;amp; Marketing - Hackademics Hanoi</title>
+     <description>đội ngũ quản lý và nhân sự</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/nhan-su/trinh-bao-ngoc/</link>
+     <title>Trịnh Bảo Ngọc - Trưởng Phòng Đào Tạo - Hackademics Hanoi</title>
+     <description>đội ngũ quản lý và nhân sự</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/nhan-su/do-van-hau/</link>
+     <title>Đỗ Văn Hậu - Giám Đốc Điều Hành - Hackademics Hanoi</title>
+     <description>đội ngũ quản lý và nhân sự</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/nhan-su/nguyen-nhu-anh-chu-tich-hoi-dong-quan-tri/</link>
+     <title>Nguyễn Như Anh - Chủ Tịch Hội Đồng Quản Trị - Hackademics Hanoi</title>
+     <description>đội ngũ quản lý và nhân sự</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>2</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/lap-trinh-vien-java/</link>
+     <title>Lập trình viên Java - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>3</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/truong-nhom-lap-trinh-ios/</link>
+     <title>Trưởng nhóm lập trình IOS - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>3</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/senior-android/</link>
+     <title>Senior Android - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>3</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/lap-trinh-vien-dot-net/</link>
+     <title>Lập trình viên .NET - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>3</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/lap-trinh-vien-php/</link>
+     <title>Lập trình viên PHP - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>3</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/tester-2/</link>
+     <title>Tester - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>3</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+<item>
+     <link>http://hackademicshanoi.vn/tuyen-dung-viec-lam/tester/</link>
+     <title>Tester - Hackademics Hanoi</title>
+     <description>thông tin tuyển dụng và việc làm</description>
+     <ror:updatePeriod>daily</ror:updatePeriod>
+     <ror:sortOrder>3</ror:sortOrder>
+     <ror:resourceOf>sitemap</ror:resourceOf>
+</item>
+</channel>
+</rss>
+  
