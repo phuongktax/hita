@@ -15,15 +15,15 @@
 <div class="container">
     <div class=" ts-devider-top parallax-section">
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-lg-9">
+                <div class="col-sm-12 col-md-9 col-lg-9">
                     <div class="ts-wrapper">
                         <div class="row">                                        
                             <div class="col-sm-12 col-lg-6 col-md-12 ">
                                 <div class="ts-wrapper">
                                     <div class="team-item team-item-style1 text-xs-center  ">                                        
                                         <img alt="<?php echo get_field('pic'); ?>" src="<?php echo get_field('pic'); ?>" style="
-    height: 272px;
-">
+                                            height: 272px;
+                                        ">
                                     </div>
                                 </div>
                             </div>

@@ -3,6 +3,11 @@ body {
     font-weight: 300;
     font-style: normal;
 }
+/*body {
+    font-family: Roboto;
+    font-weight: 300;
+    font-style: normal;
+}*/
 nav {
     font-family: 'Open Sans', sans-serif;
     font-weight: normal;
@@ -436,6 +441,7 @@ h6 {
 .ts-home4-people-say {
     padding-top: 82px!important;
     padding-bottom: 85px!important;
+    background-color: #f3f3f3!important;
 }
 .ts-home4-service .wpb_single_image {
     margin-top: 50px!important;
@@ -2232,6 +2238,7 @@ ol > li > a{
     background-color: #eee;
     padding: 6px;
     border: 1px solid #c1c1c1;
+    /*height: 82vh;*/
 }
 
 /*.doc-box a{
@@ -2252,7 +2259,7 @@ ol > li > a{
 
 .box-doc-img{
     height: 304px;
-    border-bottom: 1px solid black;
+    /*border-bottom: 1px solid black;*/
 }
 
 /*.document img{

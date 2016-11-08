@@ -31,6 +31,7 @@
         <link rel="stylesheet" type="text/css" href="<?php echo get_template_directory_uri(); ?>/css/vc-ie8.css" media="screen">
         <![endif]-->
         <link rel='stylesheet' href='<?php echo get_template_directory_uri(); ?>/css/layout.css' type='text/css' media='all'/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Roboto:400,500,700&amp;subset=vietnamese" rel="stylesheet">
         <!-- <title><?php bloginfo('name'); ?></title> -->
         
         <?php wp_head(); ?>
@@ -69,7 +70,8 @@
                         <div class="logo">
                             <h1>
                             <!-- <img src="<?php echo get_template_directory_uri(); ?>/img/hitalog.png" class=""> -->
-                             <a href="<?php echo get_bloginfo('url') ?>/" class="ariva_logo">Học viện CNTT HITA</a></h1>
+                                 <a href="<?php echo get_bloginfo('url') ?>/" class="ariva_logo" >Học viện CNTT HITA</a>
+                            </h1>
                         </div>
                         
                         <div class="pull-right ts-mainmenu">

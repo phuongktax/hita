@@ -8,91 +8,102 @@
  */
 ?>
 <?php get_header(); ?>
-<div class="content">
+
+<section id="banner">
+    <div class="banner ts-about-banner parallax-section">
+        <div class="overlay"></div>
+        <div class="banner-content text-xs-center">
+            <h1>Tin tức hoạt động</h1>
+            <div class="breadcrumbs"><a href="<?php echo get_home_url(); ?>">Trang chủ</a> <i>/</i> <i>Tin tức hoạt động</i></div>
+        </div>
+    </div>
+</section>
+
+<div id="main-content">
     <div class="container">
-        <ol class="breadcrumb">
-            <li><a href="<?php echo get_bloginfo('url') ?>/" title="Quay về trang chủ"><i class="fa fa-home"></i>  Trang chủ</a></li>
-            <li class="active">Tin Tức Hoạt Động</li>
-        </ol>
-        <h2 class="title_detail">Tin Tức Hoạt Động</h2>
-        <div class="list_course">
-            <div class="row">
-                <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-                    <div class="list_news_content">
-                    <?php
-                        echo do_shortcode( "[custom-facebook-feed  num=10 id=Hackademicshanoi showsharelink=true sharelinktext='Chia sẻ bài viết này']"); ?>
-                    </div>
-                    <div class="test"></div>
-                </div>
-                <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 ">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
-                            <div class="box_list_promotion">
-                                <h2>BÀI VIẾT MỚI NHẤT</h2>
-                                <div class="list_promotion">
-                                    <?php
-                                     $args = array( 'post_status' => 'publish', 'category_name' => "tin-tuyen-sinh", 'showposts' => 5, 'caller_get_posts'=> 1 );
-                                    $temp = $wp_query;
-                                    $wp_query= null;
-                                    $wp_query = new WP_Query( $args );
-                                    if ( $wp_query->have_posts() ) :
-                                        while ( $wp_query->have_posts() ) : $wp_query->the_post(); ;
-                                      ?>
-                                            <div class="media box_promotion">
-                                                <div class="row">
-                                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                        <div class="media-left">
-                                                            <?php $post_object = get_field('khoa-hoc-lien-ket');
-                                                            if( $post_object ):
-                                                                $post = $post_object;
-                                                                setup_postdata( $post );
-                                                            ?>
-                                                                <img src="<?php echo get_field('pic') ?> " class="img-responsive" alt="Hình đại diện khóa học">
-                                                                
-                                                            <?php endif; ?>
-                                                            <?php wp_reset_postdata(); // IMPORTANT - reset the $post object so the rest of the page works correctly ?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                                                        <div class="media-body">
-                                                            <a title="<?php the_title();?>" href="<?php the_permalink(); ?>">
-                                                                <?php the_title();?>
-                                                            </a>
-                                                            <div class="icon_time"><i class="fa fa-clock-o"></i>
-                                                                <?php echo get_the_date(); ?>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php
-                                        endwhile;
-                                    endif;
-                                ?>
-                                </div>
-                            </div>
-                            <div class="list_menu_other">
-                                <ul>
-                                    <?php
-                                        $wp_query = new WP_Query( 'post_type=chuong-trinh-dao-tao&order=desc&posts_per_page=5' );
-                                        if( $wp_query->have_posts() ) : while( $wp_query->have_posts() ):$wp_query->the_post(); ?>
-                                            <li><a href="<?php the_permalink() ;?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></li>
-                                        <?php endwhile; endif;?>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
-                            <div class="tag_noibat">
-                                <h3>TỪ KHÓA NỔI BẬT</h3>
-                                <?php
-                                wp_tag_cloud( array(  'smallest' => '1.5' ,'largest' => '1.5', 'unit' => 'rem', 'number' => '45', 'separator' => '  ', 'orderby' => 'count', 'order' => 'RAND') );
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                <!-- List all post here -->
+                <?php
+                    $type = 'post';
+                    $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+                    $args=array(
+                    'post_type' => $type,
+                    'post_status' => 'publish',
+                    'paged' => $paged,
+                    'posts_per_page' => 7,
+                    'caller_get_posts'=> 1
+                    );
+                    $temp = $wp_query;  // assign original query to temp variable for later use
+                    $wp_query = null;
+                    $wp_query = new WP_Query();
+                    $wp_query->query($args);
+                    if ( have_posts() ):
+                        // $i = 0;
+                        while ( have_posts() ) : the_post();
+                        //     if ($i%2==0) {
+                        //         echo '<div class="row">';
+                        //     }
+                            get_template_part( 'content', 'category' );
+                        //     if ($i%2==1) {
+                        //         echo '</div>';
+                        //     }
+                        //     $i++;
+                        endwhile;
+                        // unset($i);
+                    else :
+                        echo 'Không tìm thấy bài viết nào trong chuyên mục này.';
+                    endif;
+                ?>
+
+                <!-- PAGINATION -->
+                 <center>
+                   <?php custom_pagination(); ?>
+                 </center>
+                 <!-- END PAGINATION -->
             </div>
+
+            <!-- right navbar -->
+            <aside id="sidebar-right" class="sidebar-right col-md-3 col-lg-3 col-sm-12 col-xs-12">
+                    <div id="recent-posts-2" class="module widget_recent_entries">
+                        <h3 class="sidebar_title">TIN MỚI NHẤT</h3>
+                        <ul>
+                            <?php
+                                $wp_query = new WP_Query( 'post_type=post&order=desc&posts_per_page=5' );
+                                if( $wp_query->have_posts() ) : while( $wp_query->have_posts() ):$wp_query->the_post(); ?>
+                                    <li><a href="<?php the_permalink() ;?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></li>
+                                <?php endwhile; endif;?>
+                        </ul> 
+                      
+                    </div>
+                    <div id="recent-posts-2" class="module widget_recent_entries">
+                        <h3 class="sidebar_title">KHÓA HỌC MỚI NHẤT</h3>
+                        <ul>
+                            <?php
+                                $wp_query = new WP_Query( 'post_type=chuong-trinh-dao-tao&order=desc&posts_per_page=5' );
+                                if( $wp_query->have_posts() ) : while( $wp_query->have_posts() ):$wp_query->the_post(); ?>
+                                    <li><a href="<?php the_permalink() ;?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></li>
+                                <?php endwhile; endif;?>
+                        </ul> 
+                    </div>
+                    <div id="recent-posts-2" class="module widget_recent_entries">
+                        <h3>TỪ KHÓA NỔI BẬT</h3>
+                                <?php
+                                wp_tag_cloud( array(  'smallest' => '0.9' ,'largest' => '1.7', 'unit' => 'rem', 'number' => '45', 'separator' => '  ', 'orderby' => 'count', 'order' => 'RAND') );
+                                ?> 
+                    </div>
+
+            </aside>
+
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
 <?php get_footer(); ?>

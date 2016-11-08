@@ -1,0 +1,1942 @@
+<!doctype html >
+<!--[if IE 8]>    <html class="ie8" lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-US"
+	itemscope 
+	itemtype="http://schema.org/Article" 
+	prefix="og: http://ogp.me/ns#" > <!--<![endif]-->
+<head>
+    <title>Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet | Tech Talk</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="pingback" href="" />
+    <meta property="og:image" content="http://static.techtalk.vn/wp-content/uploads/2016/09/server_01.jpg" /><meta name="author" content="Hieu Le">
+<link rel="icon" type="image/png" href="http://static.techtalk.vn/wp-content/uploads/2016/02/favicon-1.png">
+<!-- All in One SEO Pack 2.3.8 by Michael Torbert of Semper Fi Web Design[297,387] -->
+<meta name="description" itemprop="description" content="Hiện nay ứng dụng web đã phát triển khác xa so với ngày đầu nó xuất hiện, kèm theo đó là vô số các kỹ thuật mới được áp dụng để phục vụ cho quá trình này nhằm" />
+
+<link rel="canonical" href="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" />
+<meta property="og:title" content="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet | Tech Talk" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" />
+<meta property="og:image" content="http://static.techtalk.vn/wp-content/uploads/2016/09/server_01.jpg" />
+<meta property="og:site_name" content="Tech Talk" />
+<meta property="fb:app_id" content="580972292069229" />
+<meta property="og:description" content="Hiện nay ứng dụng web đã phát triển khác xa so với ngày đầu nó xuất hiện, kèm theo đó là vô số các kỹ thuật mới được áp dụng để phục vụ cho quá trình này nhằm đem lại trải nghiệm mới mẻ, đầy hứng thú và cũng không kém phần tiện dụng cho người dùng. Để các bạn có 1 cái nhìn rõ ràng hơn về công nghệ web hiện đại, hôm nay mình sẽ giới thiệu với các bạn 1 số kỹ thuật hiện nay thường được sử dụng trong các ứng dụng web thời gian thực. (Trong các ví dụ bên dưới, máy khách (client) sẽ là trình duyệt của người dùng, server sẽ là webserver hosting của website , bên trái là client và bên phải là server). Tuy nhiên trước tiên mình sẽ giới thiệu mô hình truy cập theo giao thức http truyền thống. Regular HTTP:  Người dùng gửi yêu cầu (request) 1 website từ một máy chủ. Máy chủ (server) tính toán dữ liệu trả về ( response ). Máy chủ gửi dữ liệu trả về (response) cho người dùng (client).  ~&gt; Client chủ động gửi request đến server thì sẽ có response trả về cho client, còn nếu ko có request từ" />
+<meta property="article:published_time" content="2016-11-06T19:00:23Z" />
+<meta property="article:modified_time" content="2016-11-03T11:08:53Z" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet | Tech Talk" />
+<meta name="twitter:description" content="Hiện nay ứng dụng web đã phát triển khác xa so với ngày đầu nó xuất hiện, kèm theo đó là vô số các kỹ thuật mới được áp dụng để phục vụ cho quá trình này nhằm đem lại trải nghiệm mới mẻ, đầy hứng thú và cũng không kém phần tiện dụng cho người dùng. Để các bạn có 1 cái nhìn rõ ràng hơn về công nghệ web hiện đại, hôm nay mình sẽ giới thiệu với các bạn 1 số kỹ thuật hiện nay thường được sử dụng trong các ứng dụng web thời gian thực. (Trong các ví dụ bên dưới, máy khách (client) sẽ là trình duyệt của người dùng, server sẽ là webserver hosting của website , bên trái là client và bên phải là server). Tuy nhiên trước tiên mình sẽ giới thiệu mô hình truy cập theo giao thức http truyền thống. Regular HTTP:  Người dùng gửi yêu cầu (request) 1 website từ một máy chủ. Máy chủ (server) tính toán dữ liệu trả về ( response ). Máy chủ gửi dữ liệu trả về (response) cho người dùng (client).  ~&gt; Client chủ động gửi request đến server thì sẽ có response trả về cho client, còn nếu ko có request từ" />
+<meta name="twitter:image" content="http://static.techtalk.vn/wp-content/uploads/2016/09/server_01.jpg" />
+<meta itemprop="image" content="http://static.techtalk.vn/wp-content/uploads/2016/09/server_01.jpg" />
+<!-- /all in one seo pack -->
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Tech Talk &raquo; Feed" href="http://techtalk.vn/feed" />
+<link rel="alternate" type="application/rss+xml" title="Tech Talk &raquo; Comments Feed" href="http://techtalk.vn/comments/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/techtalk.vn\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6.1"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='crayon-css'  href='http://static.techtalk.vn/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=_2.7.2_beta' type='text/css' media='all' />
+<link rel='stylesheet' id='rs-plugin-settings-css'  href='http://static.techtalk.vn/wp-content/plugins/revslider/public/assets/css/settings.css?ver=5.2.5.1' type='text/css' media='all' />
+<style id='rs-plugin-settings-inline-css' type='text/css'>
+.tp-caption a{color:#ff7302;text-shadow:none;-webkit-transition:all 0.2s ease-out;-moz-transition:all 0.2s ease-out;-o-transition:all 0.2s ease-out;-ms-transition:all 0.2s ease-out}.tp-caption a:hover{color:#ffa902}
+</style>
+<link rel='stylesheet' id='google_font_open_sans-css'  href='http://fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C400%2C600%2C700&#038;subset=latin%2Cvietnamese&#038;ver=4.6.1' type='text/css' media='all' />
+<link rel='stylesheet' id='google-fonts-style-css'  href='http://fonts.googleapis.com/css?family=Roboto%3A400%2C700&#038;subset=latin%2Cvietnamese&#038;ver=4.6.1' type='text/css' media='all' />
+<link rel='stylesheet' id='js_composer_front-css'  href='http://static.techtalk.vn/wp-content/plugins/js_composer/assets/css/js_composer.min.css?ver=4.12' type='text/css' media='all' />
+<link rel='stylesheet' id='td-theme-css'  href='http://static.techtalk.vn/wp-content/themes/Newspaper/style.css?ver=7.3c' type='text/css' media='all' />
+<link rel='stylesheet' id='td-theme-child-css'  href='http://static.techtalk.vn/wp-content/themes/Newspaper-child/style.css?ver=7.3c' type='text/css' media='all' />
+<script type='text/javascript' src='http://techtalk.vn/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://techtalk.vn/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"http:\/\/techtalk.vn\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://static.techtalk.vn/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=_2.7.2_beta'></script>
+<script type='text/javascript' src='http://static.techtalk.vn/wp-content/plugins/revslider/public/assets/js/jquery.themepunch.tools.min.js?ver=5.2.5.1'></script>
+<script type='text/javascript' src='http://static.techtalk.vn/wp-content/plugins/revslider/public/assets/js/jquery.themepunch.revolution.min.js?ver=5.2.5.1'></script>
+<link rel='https://api.w.org/' href='http://techtalk.vn/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://techtalk.vn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://techtalk.vn/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?' href='http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html' />
+<link rel='next' title='More iPhone Development with Swift' href='http://techtalk.vn/more-iphone-development-with-swift.html' />
+<meta name="generator" content="WordPress 4.6.1" />
+<link rel='shortlink' href='http://techtalk.vn/?p=11339' />
+<link rel="alternate" type="application/json+oembed" href="http://techtalk.vn/wp-json/oembed/1.0/embed?url=http%3A%2F%2Ftechtalk.vn%2Fgioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" />
+<link rel="alternate" type="text/xml+oembed" href="http://techtalk.vn/wp-json/oembed/1.0/embed?url=http%3A%2F%2Ftechtalk.vn%2Fgioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html&#038;format=xml" />
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <meta name="generator" content="Powered by Visual Composer - drag and drop page builder for WordPress."/>
+<!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="http://static.techtalk.vn/wp-content/plugins/js_composer/assets/css/vc_lte_ie9.min.css" media="screen"><![endif]--><!--[if IE  8]><link rel="stylesheet" type="text/css" href="http://static.techtalk.vn/wp-content/plugins/js_composer/assets/css/vc-ie8.min.css" media="screen"><![endif]--><meta name="generator" content="Powered by Slider Revolution 5.2.5.1 - responsive, Mobile-Friendly Slider Plugin for WordPress with comfortable drag and drop interface." />
+
+<!-- JS generated by theme -->
+
+<script>
+    
+    
+
+	    var tdBlocksArray = []; //here we store all the items for the current page
+
+	    //td_block class - each ajax block uses a object of this class for requests
+	    function tdBlock() {
+		    this.id = '';
+		    this.block_type = 1; //block type id (1-234 etc)
+		    this.atts = '';
+		    this.td_column_number = '';
+		    this.td_current_page = 1; //
+		    this.post_count = 0; //from wp
+		    this.found_posts = 0; //from wp
+		    this.max_num_pages = 0; //from wp
+		    this.td_filter_value = ''; //current live filter value
+		    this.is_ajax_running = false;
+		    this.td_user_action = ''; // load more or infinite loader (used by the animation)
+		    this.header_color = '';
+		    this.ajax_pagination_infinite_stop = ''; //show load more at page x
+	    }
+
+
+        // td_js_generator - mini detector
+        (function(){
+            var htmlTag = document.getElementsByTagName("html")[0];
+
+            if ( navigator.userAgent.indexOf("MSIE 10.0") > -1 ) {
+                htmlTag.className += ' ie10';
+            }
+
+            if ( !!navigator.userAgent.match(/Trident.*rv\:11\./) ) {
+                htmlTag.className += ' ie11';
+            }
+
+            if ( /(iPad|iPhone|iPod)/g.test(navigator.userAgent) ) {
+                htmlTag.className += ' td-md-is-ios';
+            }
+
+            var user_agent = navigator.userAgent.toLowerCase();
+            if ( user_agent.indexOf("android") > -1 ) {
+                htmlTag.className += ' td-md-is-android';
+            }
+
+            if ( -1 !== navigator.userAgent.indexOf('Mac OS X')  ) {
+                htmlTag.className += ' td-md-is-os-x';
+            }
+
+            if ( /chrom(e|ium)/.test(navigator.userAgent.toLowerCase()) ) {
+               htmlTag.className += ' td-md-is-chrome';
+            }
+
+            if ( -1 !== navigator.userAgent.indexOf('Firefox') ) {
+                htmlTag.className += ' td-md-is-firefox';
+            }
+
+            if ( -1 !== navigator.userAgent.indexOf('Safari') && -1 === navigator.userAgent.indexOf('Chrome') ) {
+                htmlTag.className += ' td-md-is-safari';
+            }
+
+        })();
+
+
+
+
+        var tdLocalCache = {};
+
+        ( function () {
+            "use strict";
+
+            tdLocalCache = {
+                data: {},
+                remove: function (resource_id) {
+                    delete tdLocalCache.data[resource_id];
+                },
+                exist: function (resource_id) {
+                    return tdLocalCache.data.hasOwnProperty(resource_id) && tdLocalCache.data[resource_id] !== null;
+                },
+                get: function (resource_id) {
+                    return tdLocalCache.data[resource_id];
+                },
+                set: function (resource_id, cachedData) {
+                    tdLocalCache.remove(resource_id);
+                    tdLocalCache.data[resource_id] = cachedData;
+                }
+            };
+        })();
+
+    
+    
+var td_viewport_interval_list=[{"limitBottom":767,"sidebarWidth":228},{"limitBottom":1018,"sidebarWidth":300},{"limitBottom":1140,"sidebarWidth":324}];
+var td_animation_stack_effect="type0";
+var tds_animation_stack=true;
+var td_animation_stack_specific_selectors=".entry-thumb, img";
+var td_animation_stack_general_selectors=".td-animation-stack img, .post img";
+var td_ajax_url="http:\/\/techtalk.vn\/wp-admin\/admin-ajax.php?td_theme_name=Newspaper&v=7.3";
+var td_get_template_directory_uri="http:\/\/techtalk.vn\/wp-content\/themes\/Newspaper";
+var tds_snap_menu="smart_snap_always";
+var tds_logo_on_sticky="show_header_logo";
+var tds_header_style="";
+var td_please_wait="Vui long ch\u1edd...";
+var td_email_user_pass_incorrect="Ng\u01b0\u1eddi d\u00f9ng ho\u1eb7c m\u1eadt kh\u1ea9u kh\u00f4ng ch\u00ednh x\u00e1c!";
+var td_email_user_incorrect="Email ho\u1eb7c t\u00e0i kho\u1ea3n kh\u00f4ng ch\u00ednh x\u00e1c!";
+var td_email_incorrect="Email kh\u00f4ng \u0111\u00fang!";
+var tds_more_articles_on_post_enable="";
+var tds_more_articles_on_post_time_to_wait="";
+var tds_more_articles_on_post_pages_distance_from_top=0;
+var tds_theme_color_site_wide="#ec1f27";
+var tds_smart_sidebar="enabled";
+var tdThemeName="Newspaper";
+var td_magnific_popup_translation_tPrev="Tr\u01b0\u1edbc (Left arrow key)";
+var td_magnific_popup_translation_tNext="Ti\u1ebfp (Right arrow key)";
+var td_magnific_popup_translation_tCounter="%curr% c\u1ee7a %total%";
+var td_magnific_popup_translation_ajax_tError="Kh\u00f4ng th\u1ec3 t\u1ea3i n\u1ed9i dung t\u1ea1i %url%";
+var td_magnific_popup_translation_image_tError="Kh\u00f4ng th\u1ec3 t\u1ea3i \u1ea3nh #%curr%";
+var td_ad_background_click_link="";
+var td_ad_background_click_target="";
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74969413-1', 'auto');
+  ga('send', 'pageview');
+
+</script><noscript><style type="text/css"> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript></head>
+
+<body class="single single-post postid-11339 single-format-standard gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet wpb-js-composer js-comp-ver-4.12 vc_responsive td-animation-stack-type0 td-full-layout" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+
+        <div class="td-scroll-up"><i class="td-icon-menu-up"></i></div>
+    
+    <div class="td-menu-background"></div>
+<div id="td-mobile-nav">
+    <div class="td-mobile-container">
+        <!-- mobile menu top section -->
+        <div class="td-menu-socials-wrap">
+            <!-- socials -->
+            <div class="td-menu-socials">
+                
+        <span class="td-social-icon-wrap">
+            <a target="_blank" href="https://www.facebook.com/Techtalkvietnam/" title="Facebook">
+                <i class="td-icon-font td-icon-facebook"></i>
+            </a>
+        </span>
+        <span class="td-social-icon-wrap">
+            <a target="_blank" href="https://www.youtube.com/channel/UC-T4to_yv4ocCOd6AVagvEg" title="Youtube">
+                <i class="td-icon-font td-icon-youtube"></i>
+            </a>
+        </span>            </div>
+            <!-- close button -->
+            <div class="td-mobile-close">
+                <a href="#"><i class="td-icon-close-mobile"></i></a>
+            </div>
+        </div>
+
+        <!-- login section -->
+        
+        <!-- menu section -->
+        <div class="td-mobile-content">
+            <div class="menu-main-menu-container"><ul id="menu-main-menu" class="td-mobile-main-menu"><li id="menu-item-53" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-first menu-item-53"><a href="http://techtalk.vn/">Trang chủ</a></li>
+<li id="menu-item-54" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-54"><a href="http://techtalk.vn/apps">Ứng dụng</a></li>
+<li id="menu-item-56" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-56"><a href="http://techtalk.vn/tech">Công nghệ</a></li>
+<li id="menu-item-3035" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-3035"><a href="http://techtalk.vn/category/dev">Lập trình<i class="td-icon-menu-right td-element-after"></i></a>
+<ul class="sub-menu">
+	<li id="menu-item-0" class="menu-item-0"><a href="http://techtalk.vn/category/dev/android">Android</a></li>
+	<li class="menu-item-0"><a href="http://techtalk.vn/category/dev/ios">iOS</a></li>
+	<li class="menu-item-0"><a href="http://techtalk.vn/category/dev/thu-vien">Thư viện</a></li>
+	<li class="menu-item-0"><a href="http://techtalk.vn/category/dev/web-va-design">Web và Design</a></li>
+</ul>
+</li>
+<li id="menu-item-57" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-57"><a href="http://techtalk.vn/resources">Tài liệu</a></li>
+<li id="menu-item-309" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-309"><a href="http://techtalk.vn/category/event">Sự kiện</a></li>
+<li id="menu-item-212" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-212"><a href="http://devvui.com">Hài hước</a></li>
+</ul></div>        </div>
+    </div>
+
+    <!-- register/login section -->
+    </div>    <div class="td-search-background"></div>
+<div class="td-search-wrap-mob">
+	<div class="td-drop-down-search" aria-labelledby="td-header-search-button">
+		<form method="get" class="td-search-form" action="http://techtalk.vn/">
+			<!-- close button -->
+			<div class="td-search-close">
+				<a href="#"><i class="td-icon-close-mobile"></i></a>
+			</div>
+			<div role="search" class="td-search-input">
+				<span>Tìm kiếm</span>
+				<input id="td-header-search-mob" type="text" value="" name="s" autocomplete="off" />
+			</div>
+		</form>
+		<div id="td-aj-search-mob"></div>
+	</div>
+</div>    
+    
+    <div id="td-outer-wrap">
+    
+        <!--
+Header style 1
+-->
+
+<div class="td-header-wrap td-header-style-1">
+
+    <div class="td-header-top-menu-full">
+        <div class="td-container td-header-row td-header-top-menu">
+            <!-- LOGIN MODAL -->
+
+                <div  id="login-form" class="white-popup-block mfp-hide mfp-with-anim">
+                    <div class="td-login-wrap">
+                        <a href="#" class="td-back-button"><i class="td-icon-modal-back"></i></a>
+                        <div id="td-login-div" class="td-login-form-div td-display-block">
+                            <div class="td-login-panel-title">Sign in</div>
+                            <div class="td-login-panel-descr">Đăng nhập tài khoản</div>
+                            <div class="td_display_err"></div>
+                            <div class="td-login-inputs"><input class="td-login-input" type="text" name="login_email" id="login_email" value="" required><label>Tài khoản</label></div>
+	                        <div class="td-login-inputs"><input class="td-login-input" type="password" name="login_pass" id="login_pass" value="" required><label>mật khẩu của bạn</label></div>
+                            <input type="button" name="login_button" id="login_button" class="wpb_button btn td-login-button" value="Login">
+                            <div class="td-login-info-text"><a href="#" id="forgot-pass-link">Forgot your password? Get help</a></div>
+                            
+                        </div>
+
+                        
+
+                         <div id="td-forgot-pass-div" class="td-login-form-div td-display-none">
+                            <div class="td-login-panel-title">Password recovery</div>
+                            <div class="td-login-panel-descr">Khởi tạo mật khẩu</div>
+                            <div class="td_display_err"></div>
+                            <div class="td-login-inputs"><input class="td-login-input" type="text" name="forgot_email" id="forgot_email" value="" required><label>email của bạn</label></div>
+                            <input type="button" name="forgot_button" id="forgot_button" class="wpb_button btn td-login-button" value="Send My Password">
+                            <div class="td-login-info-text">Mật khẩu đã được gửi vào email của bạn.</div>
+                        </div>
+                    </div>
+                </div>
+                        </div>
+    </div>
+
+    <div class="td-banner-wrap-full td-logo-wrap-full">
+        <div class="td-container td-header-row td-header-header">
+            <div class="td-header-sp-logo">
+                            <a class="td-main-logo" href="http://techtalk.vn/">
+                <img src="http://static.techtalk.vn/wp-content/uploads/2016/02/logoretina.png" alt=""/>
+                <span class="td-visual-hidden">Tech Talk</span>
+            </a>
+                    </div>
+            <div class="td-header-sp-recs">
+                <div class="td-header-rec-wrap">
+    <div class="td-a-rec td-a-rec-id-header  "><div class="td-all-devices"><a href="http://topdevvn.com/s/e583387bf5" target="_blank"><img src="http://static.techtalk.vn/wp-content/uploads/2016/03/header-techtalk.png"/></a></div></div>
+</div>            </div>
+        </div>
+    </div>
+
+    <div class="td-header-menu-wrap-full">
+        <div class="td-header-menu-wrap td-header-gradient">
+            <div class="td-container td-header-row td-header-main-menu">
+                <div id="td-header-menu" role="navigation">
+    <div id="td-top-mobile-toggle"><a href="#"><i class="td-icon-font td-icon-mobile"></i></a></div>
+    <div class="td-main-menu-logo td-logo-in-header">
+        		<a class="td-mobile-logo td-sticky-header" href="http://techtalk.vn/">
+			<img class="td-retina-data" data-retina="http://static.techtalk.vn/wp-content/uploads/2016/02/mobile.png" src="http://static.techtalk.vn/wp-content/uploads/2016/02/mobile.png" alt=""/>
+		</a>
+			<a class="td-header-logo td-sticky-header" href="http://techtalk.vn/">
+			<img src="http://static.techtalk.vn/wp-content/uploads/2016/02/logoretina.png" alt=""/>
+		</a>
+	    </div>
+    <div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="sf-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-first td-menu-item td-normal-menu menu-item-53"><a href="http://techtalk.vn/">Trang chủ</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom td-menu-item td-mega-menu menu-item-54"><a href="http://techtalk.vn/apps">Ứng dụng</a>
+<ul class="sub-menu">
+	<li class="menu-item-0"><div class="td-container-border"><div class="td-mega-grid"><div class="td_block_wrap td_block_mega_menu td_uid_2_581f7616b430b_rand td-no-subcats td_with_ajax_pagination td-pb-border-top"  data-td-block-uid="td_uid_2_581f7616b430b" ><script>var block_td_uid_2_581f7616b430b = new tdBlock();
+block_td_uid_2_581f7616b430b.id = "td_uid_2_581f7616b430b";
+block_td_uid_2_581f7616b430b.atts = '{"limit":"5","sort":"","post_ids":"","tag_slug":"","autors_id":"","installed_post_types":"","category_id":"6","category_ids":"","custom_title":"","custom_url":"","show_child_cat":30,"sub_cat_ajax":"","ajax_pagination":"next_prev","header_color":"","header_text_color":"","ajax_pagination_infinite_stop":"","td_column_number":3,"td_ajax_preloading":"","td_ajax_filter_type":"td_category_ids_filter","td_ajax_filter_ids":"","td_filter_default_txt":"T\u1ea5t c\u1ea3","color_preset":"","border_top":"","class":"td_uid_2_581f7616b430b_rand","offset":"","css":"","live_filter":"","live_filter_cur_post_id":"","live_filter_cur_post_author":""}';
+block_td_uid_2_581f7616b430b.td_column_number = "3";
+block_td_uid_2_581f7616b430b.block_type = "td_block_mega_menu";
+block_td_uid_2_581f7616b430b.post_count = "5";
+block_td_uid_2_581f7616b430b.found_posts = "298";
+block_td_uid_2_581f7616b430b.header_color = "";
+block_td_uid_2_581f7616b430b.ajax_pagination_infinite_stop = "";
+block_td_uid_2_581f7616b430b.max_num_pages = "60";
+tdBlocksArray.push(block_td_uid_2_581f7616b430b);
+</script><div id=td_uid_2_581f7616b430b class="td_block_inner"><div class="td-mega-row"><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html" rel="bookmark" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/03/ChevroniOS8_Swift-720x424-218x150.jpg" alt="" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html" rel="bookmark" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?">Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/21-nguon-mo-swift.html" rel="bookmark" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/swift-open-source-218x150.png" alt="" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/21-nguon-mo-swift.html" rel="bookmark" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift">21 nguồn mở tuyệt vời để viết các ứng dụng iOS&#8230;</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/so-bo-ve-atlas-lai-mot-orm-nhiem-mau-nua.html" rel="bookmark" title="Sơ bộ về Atlas &#8211; lại một ORM nhiệm màu nữa"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/1476710131atlas-carry-globe-kneeling-ISO-218x150.png" alt="" title="Sơ bộ về Atlas &#8211; lại một ORM nhiệm màu nữa"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/so-bo-ve-atlas-lai-mot-orm-nhiem-mau-nua.html" rel="bookmark" title="Sơ bộ về Atlas &#8211; lại một ORM nhiệm màu nữa">Sơ bộ về Atlas &#8211; lại một ORM nhiệm màu nữa</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/css-code-generator-mien-phi-tao-filter-anh-nhu-instagram.html" rel="bookmark" title="CSS Code Generator Miễn Phí: Tạo Filter Ảnh Như Instagram"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/code-generators-instagram-filters-218x150.jpg" alt="" title="CSS Code Generator Miễn Phí: Tạo Filter Ảnh Như Instagram"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/css-code-generator-mien-phi-tao-filter-anh-nhu-instagram.html" rel="bookmark" title="CSS Code Generator Miễn Phí: Tạo Filter Ảnh Như Instagram">CSS Code Generator Miễn Phí: Tạo Filter Ảnh Như Instagram</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/cloudflare-da-thiet-ke-he-thong-cua-ho-nhu-the-nao-de-de-dang-mo-rong-nhanh-chong-nham-do-cac-cuoc-tan-cong-ddos-quy-mo-lon.html" rel="bookmark" title="Cloudflare đã thiết kế hệ thống của họ như thế nào để dễ dàng mở rộng nhanh chóng nhằm đỡ các cuộc tấn công DDoS quy mô lớn?"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/article_1595189_pic-218x150.jpeg" alt="" title="Cloudflare đã thiết kế hệ thống của họ như thế nào để dễ dàng mở rộng nhanh chóng nhằm đỡ các cuộc tấn công DDoS quy mô lớn?"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/cloudflare-da-thiet-ke-he-thong-cua-ho-nhu-the-nao-de-de-dang-mo-rong-nhanh-chong-nham-do-cac-cuoc-tan-cong-ddos-quy-mo-lon.html" rel="bookmark" title="Cloudflare đã thiết kế hệ thống của họ như thế nào để dễ dàng mở rộng nhanh chóng nhằm đỡ các cuộc tấn công DDoS quy mô lớn?">Cloudflare đã thiết kế hệ thống của họ như thế nào&#8230;</a></h3>            </div>
+        </div>
+        </div></div></div><div class="td-next-prev-wrap"><a href="#" class="td-ajax-prev-page ajax-page-disabled" id="prev-page-td_uid_2_581f7616b430b" data-td_block_id="td_uid_2_581f7616b430b"><i class="td-icon-font td-icon-menu-left"></i></a><a href="#"  class="td-ajax-next-page" id="next-page-td_uid_2_581f7616b430b" data-td_block_id="td_uid_2_581f7616b430b"><i class="td-icon-font td-icon-menu-right"></i></a></div><div class="clearfix"></div></div> <!-- ./block1 --></div></div></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom td-menu-item td-mega-menu menu-item-56"><a href="http://techtalk.vn/tech">Công nghệ</a>
+<ul class="sub-menu">
+	<li class="menu-item-0"><div class="td-container-border"><div class="td-mega-grid"><div class="td_block_wrap td_block_mega_menu td_uid_3_581f7616bd42e_rand td-no-subcats td_with_ajax_pagination td-pb-border-top"  data-td-block-uid="td_uid_3_581f7616bd42e" ><script>var block_td_uid_3_581f7616bd42e = new tdBlock();
+block_td_uid_3_581f7616bd42e.id = "td_uid_3_581f7616bd42e";
+block_td_uid_3_581f7616bd42e.atts = '{"limit":"5","sort":"","post_ids":"","tag_slug":"","autors_id":"","installed_post_types":"","category_id":"1","category_ids":"","custom_title":"","custom_url":"","show_child_cat":30,"sub_cat_ajax":"","ajax_pagination":"next_prev","header_color":"","header_text_color":"","ajax_pagination_infinite_stop":"","td_column_number":3,"td_ajax_preloading":"","td_ajax_filter_type":"td_category_ids_filter","td_ajax_filter_ids":"","td_filter_default_txt":"T\u1ea5t c\u1ea3","color_preset":"","border_top":"","class":"td_uid_3_581f7616bd42e_rand","offset":"","css":"","live_filter":"","live_filter_cur_post_id":"","live_filter_cur_post_author":""}';
+block_td_uid_3_581f7616bd42e.td_column_number = "3";
+block_td_uid_3_581f7616bd42e.block_type = "td_block_mega_menu";
+block_td_uid_3_581f7616bd42e.post_count = "5";
+block_td_uid_3_581f7616bd42e.found_posts = "847";
+block_td_uid_3_581f7616bd42e.header_color = "";
+block_td_uid_3_581f7616bd42e.ajax_pagination_infinite_stop = "";
+block_td_uid_3_581f7616bd42e.max_num_pages = "170";
+tdBlocksArray.push(block_td_uid_3_581f7616bd42e);
+</script><div id=td_uid_3_581f7616bd42e class="td_block_inner"><div class="td-mega-row"><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" rel="bookmark" title="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/09/server_01-218x150.jpg" alt="" title="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" rel="bookmark" title="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet">Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html" rel="bookmark" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/03/ChevroniOS8_Swift-720x424-218x150.jpg" alt="" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html" rel="bookmark" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?">Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/cai-toi-ca-nhan-khi-teamwork.html" rel="bookmark" title="Cái tôi cá nhân khi teamwork"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/photo-1438354886727-070458b3b5cf-218x150.jpg" alt="" title="Cái tôi cá nhân khi teamwork"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/cai-toi-ca-nhan-khi-teamwork.html" rel="bookmark" title="Cái tôi cá nhân khi teamwork">Cái tôi cá nhân khi teamwork</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/tan-man-mot-bai-toan-trong-project.html" rel="bookmark" title="Tản mạn một bài toán trong Project"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/computer-programmer-218x150.jpg" alt="" title="Tản mạn một bài toán trong Project"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/tan-man-mot-bai-toan-trong-project.html" rel="bookmark" title="Tản mạn một bài toán trong Project">Tản mạn một bài toán trong Project</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/21-nguon-mo-swift.html" rel="bookmark" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/swift-open-source-218x150.png" alt="" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/21-nguon-mo-swift.html" rel="bookmark" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift">21 nguồn mở tuyệt vời để viết các ứng dụng iOS&#8230;</a></h3>            </div>
+        </div>
+        </div></div></div><div class="td-next-prev-wrap"><a href="#" class="td-ajax-prev-page ajax-page-disabled" id="prev-page-td_uid_3_581f7616bd42e" data-td_block_id="td_uid_3_581f7616bd42e"><i class="td-icon-font td-icon-menu-left"></i></a><a href="#"  class="td-ajax-next-page" id="next-page-td_uid_3_581f7616bd42e" data-td_block_id="td_uid_3_581f7616bd42e"><i class="td-icon-font td-icon-menu-right"></i></a></div><div class="clearfix"></div></div> <!-- ./block1 --></div></div></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category td-menu-item td-mega-menu menu-item-3035"><a href="http://techtalk.vn/category/dev">Lập trình</a>
+<ul class="sub-menu">
+	<li class="menu-item-0"><div class="td-container-border"><div class="td-mega-grid"><div class="td_block_wrap td_block_mega_menu td_uid_4_581f7616c5225_rand td_with_ajax_pagination td-pb-border-top"  data-td-block-uid="td_uid_4_581f7616c5225" ><script>var block_td_uid_4_581f7616c5225 = new tdBlock();
+block_td_uid_4_581f7616c5225.id = "td_uid_4_581f7616c5225";
+block_td_uid_4_581f7616c5225.atts = '{"limit":4,"sort":"","post_ids":"","tag_slug":"","autors_id":"","installed_post_types":"","category_id":"19","category_ids":"","custom_title":"","custom_url":"","show_child_cat":30,"sub_cat_ajax":"","ajax_pagination":"next_prev","header_color":"","header_text_color":"","ajax_pagination_infinite_stop":"","td_column_number":3,"td_ajax_preloading":"","td_ajax_filter_type":"td_category_ids_filter","td_ajax_filter_ids":"","td_filter_default_txt":"T\u1ea5t c\u1ea3","color_preset":"","border_top":"","class":"td_uid_4_581f7616c5225_rand","offset":"","css":"","live_filter":"","live_filter_cur_post_id":"","live_filter_cur_post_author":""}';
+block_td_uid_4_581f7616c5225.td_column_number = "3";
+block_td_uid_4_581f7616c5225.block_type = "td_block_mega_menu";
+block_td_uid_4_581f7616c5225.post_count = "4";
+block_td_uid_4_581f7616c5225.found_posts = "660";
+block_td_uid_4_581f7616c5225.header_color = "";
+block_td_uid_4_581f7616c5225.ajax_pagination_infinite_stop = "";
+block_td_uid_4_581f7616c5225.max_num_pages = "165";
+tdBlocksArray.push(block_td_uid_4_581f7616c5225);
+</script><div class="td_mega_menu_sub_cats"><div class="block-mega-child-cats"><a class="cur-sub-cat mega-menu-sub-cat-td_uid_4_581f7616c5225" id="td_uid_5_581f7616ca1b9" data-td_block_id="td_uid_4_581f7616c5225" data-td_filter_value="" href="http://techtalk.vn/category/dev">Tất cả</a><a class="mega-menu-sub-cat-td_uid_4_581f7616c5225"  id="td_uid_6_581f7616ca332" data-td_block_id="td_uid_4_581f7616c5225" data-td_filter_value="130" href="http://techtalk.vn/category/dev/android">Android</a><a class="mega-menu-sub-cat-td_uid_4_581f7616c5225"  id="td_uid_7_581f7616ca54e" data-td_block_id="td_uid_4_581f7616c5225" data-td_filter_value="129" href="http://techtalk.vn/category/dev/ios">iOS</a><a class="mega-menu-sub-cat-td_uid_4_581f7616c5225"  id="td_uid_8_581f7616ca75e" data-td_block_id="td_uid_4_581f7616c5225" data-td_filter_value="153" href="http://techtalk.vn/category/dev/thu-vien">Thư viện</a><a class="mega-menu-sub-cat-td_uid_4_581f7616c5225"  id="td_uid_9_581f7616ca980" data-td_block_id="td_uid_4_581f7616c5225" data-td_filter_value="131" href="http://techtalk.vn/category/dev/web-va-design">Web và Design</a></div></div><div id=td_uid_4_581f7616c5225 class="td_block_inner"><div class="td-mega-row"><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/more-iphone-development-with-swift.html" rel="bookmark" title="More iPhone Development with Swift"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/mau-2-1-218x150.jpg" alt="" title="More iPhone Development with Swift"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/more-iphone-development-with-swift.html" rel="bookmark" title="More iPhone Development with Swift">More iPhone Development with Swift</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html" rel="bookmark" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/03/ChevroniOS8_Swift-720x424-218x150.jpg" alt="" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html" rel="bookmark" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?">Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/10-loi-cac-dev-nodejs-thuong-mac-phai-phan-3.html" rel="bookmark" title="10 lỗi các dev NodeJS thường mắc phải (phần 3)"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/toptal-blog-image-1427379420257-218x150.jpg" alt="" title="10 lỗi các dev NodeJS thường mắc phải (phần 3)"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/10-loi-cac-dev-nodejs-thuong-mac-phai-phan-3.html" rel="bookmark" title="10 lỗi các dev NodeJS thường mắc phải (phần 3)">10 lỗi các dev NodeJS thường mắc phải (phần 3)</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/pro-php-and-jquery.html" rel="bookmark" title="Pro PHP and jQuery"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/mau-1-218x150.jpg" alt="" title="Pro PHP and jQuery"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/pro-php-and-jquery.html" rel="bookmark" title="Pro PHP and jQuery">Pro PHP and jQuery</a></h3>            </div>
+        </div>
+        </div></div></div><div class="td-next-prev-wrap"><a href="#" class="td-ajax-prev-page ajax-page-disabled" id="prev-page-td_uid_4_581f7616c5225" data-td_block_id="td_uid_4_581f7616c5225"><i class="td-icon-font td-icon-menu-left"></i></a><a href="#"  class="td-ajax-next-page" id="next-page-td_uid_4_581f7616c5225" data-td_block_id="td_uid_4_581f7616c5225"><i class="td-icon-font td-icon-menu-right"></i></a></div><div class="clearfix"></div></div> <!-- ./block1 --></div></div></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom td-menu-item td-mega-menu menu-item-57"><a href="http://techtalk.vn/resources">Tài liệu</a>
+<ul class="sub-menu">
+	<li class="menu-item-0"><div class="td-container-border"><div class="td-mega-grid"><div class="td_block_wrap td_block_mega_menu td_uid_10_581f7616cd5fc_rand td-no-subcats td_with_ajax_pagination td-pb-border-top"  data-td-block-uid="td_uid_10_581f7616cd5fc" ><script>var block_td_uid_10_581f7616cd5fc = new tdBlock();
+block_td_uid_10_581f7616cd5fc.id = "td_uid_10_581f7616cd5fc";
+block_td_uid_10_581f7616cd5fc.atts = '{"limit":"5","sort":"","post_ids":"","tag_slug":"","autors_id":"","installed_post_types":"","category_id":"20","category_ids":"","custom_title":"","custom_url":"","show_child_cat":30,"sub_cat_ajax":"","ajax_pagination":"next_prev","header_color":"","header_text_color":"","ajax_pagination_infinite_stop":"","td_column_number":3,"td_ajax_preloading":"","td_ajax_filter_type":"td_category_ids_filter","td_ajax_filter_ids":"","td_filter_default_txt":"T\u1ea5t c\u1ea3","color_preset":"","border_top":"","class":"td_uid_10_581f7616cd5fc_rand","offset":"","css":"","live_filter":"","live_filter_cur_post_id":"","live_filter_cur_post_author":""}';
+block_td_uid_10_581f7616cd5fc.td_column_number = "3";
+block_td_uid_10_581f7616cd5fc.block_type = "td_block_mega_menu";
+block_td_uid_10_581f7616cd5fc.post_count = "5";
+block_td_uid_10_581f7616cd5fc.found_posts = "116";
+block_td_uid_10_581f7616cd5fc.header_color = "";
+block_td_uid_10_581f7616cd5fc.ajax_pagination_infinite_stop = "";
+block_td_uid_10_581f7616cd5fc.max_num_pages = "24";
+tdBlocksArray.push(block_td_uid_10_581f7616cd5fc);
+</script><div id=td_uid_10_581f7616cd5fc class="td_block_inner"><div class="td-mega-row"><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/more-iphone-development-with-swift.html" rel="bookmark" title="More iPhone Development with Swift"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/mau-2-1-218x150.jpg" alt="" title="More iPhone Development with Swift"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/more-iphone-development-with-swift.html" rel="bookmark" title="More iPhone Development with Swift">More iPhone Development with Swift</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/pro-php-and-jquery.html" rel="bookmark" title="Pro PHP and jQuery"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/mau-1-218x150.jpg" alt="" title="Pro PHP and jQuery"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/pro-php-and-jquery.html" rel="bookmark" title="Pro PHP and jQuery">Pro PHP and jQuery</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/nhung-website-hoc-lap-trinh-online-nen-bookmark-tieng-viet.html" rel="bookmark" title="Những website học lập trình online nên bookmark (tiếng Việt)"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/05/techtalklaptrinh-218x150.jpg" alt="" title="Những website học lập trình online nên bookmark (tiếng Việt)"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/nhung-website-hoc-lap-trinh-online-nen-bookmark-tieng-viet.html" rel="bookmark" title="Những website học lập trình online nên bookmark (tiếng Việt)">Những website học lập trình online nên bookmark (tiếng Việt)</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/10-thu-vien-android-huu-ich-danh-cho-developers.html" rel="bookmark" title="10 thư viện Android hữu ích dành cho Developers"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/image-218x150.jpeg" alt="" title="10 thư viện Android hữu ích dành cho Developers"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/10-thu-vien-android-huu-ich-danh-cho-developers.html" rel="bookmark" title="10 thư viện Android hữu ích dành cho Developers">10 thư viện Android hữu ích dành cho Developers</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/the-principles-of-beautiful-web-design-3rd-edition.html" rel="bookmark" title="The Principles of Beautiful Web Design, 3rd Edition"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/mau-2-218x150.jpg" alt="" title="The Principles of Beautiful Web Design, 3rd Edition"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/the-principles-of-beautiful-web-design-3rd-edition.html" rel="bookmark" title="The Principles of Beautiful Web Design, 3rd Edition">The Principles of Beautiful Web Design, 3rd Edition</a></h3>            </div>
+        </div>
+        </div></div></div><div class="td-next-prev-wrap"><a href="#" class="td-ajax-prev-page ajax-page-disabled" id="prev-page-td_uid_10_581f7616cd5fc" data-td_block_id="td_uid_10_581f7616cd5fc"><i class="td-icon-font td-icon-menu-left"></i></a><a href="#"  class="td-ajax-next-page" id="next-page-td_uid_10_581f7616cd5fc" data-td_block_id="td_uid_10_581f7616cd5fc"><i class="td-icon-font td-icon-menu-right"></i></a></div><div class="clearfix"></div></div> <!-- ./block1 --></div></div></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category td-menu-item td-mega-menu menu-item-309"><a href="http://techtalk.vn/category/event">Sự kiện</a>
+<ul class="sub-menu">
+	<li class="menu-item-0"><div class="td-container-border"><div class="td-mega-grid"><div class="td_block_wrap td_block_mega_menu td_uid_11_581f7616d2f6a_rand td-no-subcats td_with_ajax_pagination td-pb-border-top"  data-td-block-uid="td_uid_11_581f7616d2f6a" ><script>var block_td_uid_11_581f7616d2f6a = new tdBlock();
+block_td_uid_11_581f7616d2f6a.id = "td_uid_11_581f7616d2f6a";
+block_td_uid_11_581f7616d2f6a.atts = '{"limit":"5","sort":"","post_ids":"","tag_slug":"","autors_id":"","installed_post_types":"","category_id":"25","category_ids":"","custom_title":"","custom_url":"","show_child_cat":30,"sub_cat_ajax":"","ajax_pagination":"next_prev","header_color":"","header_text_color":"","ajax_pagination_infinite_stop":"","td_column_number":3,"td_ajax_preloading":"","td_ajax_filter_type":"td_category_ids_filter","td_ajax_filter_ids":"","td_filter_default_txt":"T\u1ea5t c\u1ea3","color_preset":"","border_top":"","class":"td_uid_11_581f7616d2f6a_rand","offset":"","css":"","live_filter":"","live_filter_cur_post_id":"","live_filter_cur_post_author":""}';
+block_td_uid_11_581f7616d2f6a.td_column_number = "3";
+block_td_uid_11_581f7616d2f6a.block_type = "td_block_mega_menu";
+block_td_uid_11_581f7616d2f6a.post_count = "5";
+block_td_uid_11_581f7616d2f6a.found_posts = "77";
+block_td_uid_11_581f7616d2f6a.header_color = "";
+block_td_uid_11_581f7616d2f6a.ajax_pagination_infinite_stop = "";
+block_td_uid_11_581f7616d2f6a.max_num_pages = "16";
+tdBlocksArray.push(block_td_uid_11_581f7616d2f6a);
+</script><div id=td_uid_11_581f7616d2f6a class="td_block_inner"><div class="td-mega-row"><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/tung-bung-ngay-hoi-cong-nghe-web-lon-nhat-da-nang.html" rel="bookmark" title="Tưng bừng ngày hội công nghệ web lớn nhất Đà Nẵng!"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/14947538_10211642451605467_5149807635309475178_n-218x150.jpg" alt="" title="Tưng bừng ngày hội công nghệ web lớn nhất Đà Nẵng!"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/tung-bung-ngay-hoi-cong-nghe-web-lon-nhat-da-nang.html" rel="bookmark" title="Tưng bừng ngày hội công nghệ web lớn nhất Đà Nẵng!">Tưng bừng ngày hội công nghệ web lớn nhất Đà Nẵng!</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/khoi-dong-thang-11-tai-da-nang-cung-vietnam-web-summit-2016.html" rel="bookmark" title="Khởi động tháng 11 tại Đà Nẵng cùng Vietnam Web Summit 2016"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/IMG_1939-218x150.jpg" alt="" title="Khởi động tháng 11 tại Đà Nẵng cùng Vietnam Web Summit 2016"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/khoi-dong-thang-11-tai-da-nang-cung-vietnam-web-summit-2016.html" rel="bookmark" title="Khởi động tháng 11 tại Đà Nẵng cùng Vietnam Web Summit 2016">Khởi động tháng 11 tại Đà Nẵng cùng Vietnam Web Summit&#8230;</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/cong-dong-cong-nghe-ha-noi-tung-bung-hao-hung-truoc-vietnam-web-summit.html" rel="bookmark" title="Cộng đồng công nghệ Hà Nội tưng bừng hào hứng trong sự kiện Vietnam Web Summit"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/IMG_2633-218x150.jpg" alt="" title="Cộng đồng công nghệ Hà Nội tưng bừng hào hứng trong sự kiện Vietnam Web Summit"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/cong-dong-cong-nghe-ha-noi-tung-bung-hao-hung-truoc-vietnam-web-summit.html" rel="bookmark" title="Cộng đồng công nghệ Hà Nội tưng bừng hào hứng trong sự kiện Vietnam Web Summit">Cộng đồng công nghệ Hà Nội tưng bừng hào hứng trong&#8230;</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/web-summit-2016-se-co-mat-tai-ha-noi.html" rel="bookmark" title="VWS2016 đến Hà Nội, vé đã gần hết trước ngày diễn ra sự kiện"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/Screen-Shot-2016-10-26-at-10.26.35-AM-218x150.png" alt="" title="VWS2016 đến Hà Nội, vé đã gần hết trước ngày diễn ra sự kiện"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/web-summit-2016-se-co-mat-tai-ha-noi.html" rel="bookmark" title="VWS2016 đến Hà Nội, vé đã gần hết trước ngày diễn ra sự kiện">VWS2016 đến Hà Nội, vé đã gần hết trước ngày diễn&#8230;</a></h3>            </div>
+        </div>
+        </div><div class="td-mega-span">
+        <div class="td_module_mega_menu td_mod_mega_menu">
+            <div class="td-module-image">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/web-summit-2016-se-them-lua-cho-ha-noi.html" rel="bookmark" title="Vietnam Web Summit 2016, sẽ thêm lửa cho Hà Nội"><img width="218" height="150" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/event-ads-218x150.jpg" alt="" title="Vietnam Web Summit 2016, sẽ thêm lửa cho Hà Nội"/></a></div>                            </div>
+
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/web-summit-2016-se-them-lua-cho-ha-noi.html" rel="bookmark" title="Vietnam Web Summit 2016, sẽ thêm lửa cho Hà Nội">Vietnam Web Summit 2016, sẽ thêm lửa cho Hà Nội</a></h3>            </div>
+        </div>
+        </div></div></div><div class="td-next-prev-wrap"><a href="#" class="td-ajax-prev-page ajax-page-disabled" id="prev-page-td_uid_11_581f7616d2f6a" data-td_block_id="td_uid_11_581f7616d2f6a"><i class="td-icon-font td-icon-menu-left"></i></a><a href="#"  class="td-ajax-next-page" id="next-page-td_uid_11_581f7616d2f6a" data-td_block_id="td_uid_11_581f7616d2f6a"><i class="td-icon-font td-icon-menu-right"></i></a></div><div class="clearfix"></div></div> <!-- ./block1 --></div></div></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom td-menu-item td-normal-menu menu-item-212"><a href="http://devvui.com">Hài hước</a></li>
+</ul></div></div>
+
+
+<div class="td-search-wrapper">
+    <div id="td-top-search">
+        <!-- Search -->
+        <div class="header-search-wrap">
+            <div class="dropdown header-search">
+                <a id="td-header-search-button" href="#" role="button" class="dropdown-toggle " data-toggle="dropdown"><i class="td-icon-search"></i></a>
+                <a id="td-header-search-button-mob" href="#" role="button" class="dropdown-toggle " data-toggle="dropdown"><i class="td-icon-search"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header-search-wrap">
+	<div class="dropdown header-search">
+		<div class="td-drop-down-search" aria-labelledby="td-header-search-button">
+			<form method="get" class="td-search-form" action="http://techtalk.vn/">
+				<div role="search" class="td-head-form-search-wrap">
+					<input id="td-header-search" type="text" value="" name="s" autocomplete="off" /><input class="wpb_button wpb_btn-inverse btn" type="submit" id="td-header-search-top" value="Tìm kiếm" />
+				</div>
+			</form>
+			<div id="td-aj-search"></div>
+		</div>
+	</div>
+</div>            </div>
+        </div>
+    </div>
+
+</div><div class="td-main-content-wrap">
+
+    <div class="td-container td-post-template-default ">
+        <div class="td-crumb-container"><div class="entry-crumbs"><span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a title="" class="entry-crumb" itemprop="url" href="http://techtalk.vn/"><span itemprop="title">Trang Chủ</span></a></span> <i class="td-icon-right td-bread-sep"></i> <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a title="Xem tất cả các bài viết trong Công nghệ" class="entry-crumb" itemprop="url" href="http://techtalk.vn/category/tech"><span itemprop="title">Công nghệ</span></a></span> <i class="td-icon-right td-bread-sep td-bred-no-url-last"></i> <span class="td-bred-no-url-last" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><meta itemprop="title" content = "Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet"><meta itemprop="url" content = "http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html">Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet</span></div></div>
+
+        <div class="td-pb-row">
+                                    <div class="td-pb-span8 td-main-content" role="main">
+                            <div class="td-ss-main-content">
+                                
+    <article id="post-11339" class="post-11339 post type-post status-publish format-standard has-post-thumbnail hentry category-tech category-featured" itemscope itemtype="http://schema.org/Article">
+        <div class="td-post-header">
+
+            
+            <header class="td-post-title">
+                <h1 class="entry-title">Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet</h1>
+
+                
+
+                <div class="td-module-meta-info">
+                                        <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-11-06T19:00:23+00:00" >November 6, 2016</time></span>                                        <div class="td-post-views"><i class="td-icon-views"></i><span class="td-nr-views-11339">42</span></div>                </div>
+
+            </header>
+
+        </div>
+
+        <div class="td-post-sharing td-post-sharing-top td-with-like">
+				<div class="td-default-sharing">
+		            <a class="td-social-sharing-buttons td-social-facebook" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Ftechtalk.vn%2Fgioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" onclick="window.open(this.href, 'mywin','left=50,top=50,width=600,height=350,toolbar=0'); return false;"><i class="td-icon-facebook"></i><div class="td-social-but-text">Chia sẻ Facebook</div></a>
+		            <a class="td-social-sharing-buttons td-social-twitter" href="https://twitter.com/intent/tweet?text=Gi%E1%BB%9Bi+thi%E1%BB%87u+k%E1%BB%B9+thu%E1%BA%ADt+Long-Polling%2C+Websockets%2C+Server-Sent+Events%2C+Comet&url=http%3A%2F%2Ftechtalk.vn%2Fgioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html&via=Tech+Talk"  ><i class="td-icon-twitter"></i><div class="td-social-but-text">Tweet</div></a>
+		            <a class="td-social-sharing-buttons td-social-google" href="http://plus.google.com/share?url=http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" onclick="window.open(this.href, 'mywin','left=50,top=50,width=600,height=350,toolbar=0'); return false;"><i class="td-icon-googleplus"></i></a>
+		            <a class="td-social-sharing-buttons td-social-pinterest" href="http://pinterest.com/pin/create/button/?url=http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html&amp;media=http://techtalk.vn/wp-content/uploads/2016/09/server_01.jpg&description=Gi%E1%BB%9Bi+thi%E1%BB%87u+k%E1%BB%B9+thu%E1%BA%ADt+Long-Polling%2C+Websockets%2C+Server-Sent+Events%2C+Comet" onclick="window.open(this.href, 'mywin','left=50,top=50,width=600,height=350,toolbar=0'); return false;"><i class="td-icon-pinterest"></i></a>
+		            <a class="td-social-sharing-buttons td-social-whatsapp" href="whatsapp://send?text=Gi%E1%BB%9Bi+thi%E1%BB%87u+k%E1%BB%B9+thu%E1%BA%ADt+Long-Polling%2C+Websockets%2C+Server-Sent+Events%2C+Comet%20-%20http%3A%2F%2Ftechtalk.vn%2Fgioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" ><i class="td-icon-whatsapp"></i></a>
+	            </div><div class="td-classic-sharing"><ul><li class="td-classic-facebook"><iframe frameBorder="0" src="http://www.facebook.com/plugins/like.php?href=http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html&amp;layout=button_count&amp;show_faces=false&amp;width=105&amp;action=like&amp;colorscheme=light&amp;height=21" style="border:none; overflow:hidden; width:105px; height:21px; background-color:transparent;"></iframe></li><li class="td-classic-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" data-text="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet" data-via="" data-lang="en">tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li></ul></div></div>
+
+        <div class="td-post-content">
+
+        <div class="td-post-featured-image"><img width="474" height="316" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/09/server_01.jpg" alt="" title="server_01"/></div>
+        <p>Hiện nay ứng dụng web đã phát triển khác xa so với ngày đầu nó xuất hiện, kèm theo đó là vô số các kỹ thuật mới được áp dụng để phục vụ cho quá trình này nhằm đem lại trải nghiệm mới mẻ, đầy hứng thú và cũng không kém phần tiện dụng cho người dùng.</p>
+<p>Để các bạn có 1 cái nhìn rõ ràng hơn về công nghệ web hiện đại, hôm nay mình sẽ giới thiệu với các bạn 1 số kỹ thuật hiện nay thường được sử dụng trong các ứng dụng web thời gian thực.</p>
+<div class="td-a-rec td-a-rec-id-content_inline  "><div class="td-all-devices"><a href="http://topdevvn.com/s/e583387bf5" target="_blank"><img src="http://static.techtalk.vn/wp-content/uploads/2016/03/header-techtalk.png"/></a></div></div><p>(<em>Trong các ví dụ bên dưới, máy khách (client) sẽ là trình duyệt của người dùng, server sẽ là webserver hosting của website , bên trái là client và bên phải là server</em>). Tuy nhiên trước tiên mình sẽ giới thiệu mô hình truy cập theo giao thức http truyền thống.</p>
+<h2>Regular HTTP:</h2>
+<ol>
+<li>Người dùng gửi yêu cầu (request) 1 website từ một máy chủ.</li>
+<li>Máy chủ (server) tính toán dữ liệu trả về ( response ).</li>
+<li>Máy chủ gửi dữ liệu trả về (response) cho người dùng (client).</li>
+</ol>
+<p>~&gt; Client chủ động gửi request đến server thì sẽ có response trả về cho client, còn nếu ko có request từ client thì server sẽ không làm gì cả.</p>
+<h2>AJAX Polling:</h2>
+<p><img class="aligncenter size-full wp-image-11340" src="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-polling.png" alt="ky-thuat-lap-trinh-web-regular-http-13122015-polling" width="646" height="364" srcset="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-polling.png 646w, http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-polling-300x169.png 300w" sizes="(max-width: 646px) 100vw, 646px" /></p>
+<ol>
+<li>Client yêu cầu 1 trang web từ server sử dụng “Regular http” (đã nói ở trên).</li>
+<li>Trang web mà client vừa yêu cầu sẽ dùng javascript thực hiện request liên tục đến 1 file trên server trong một khoảng thời gian đều đặn (ví dụ: cứ mỗi 2 giây sẽ gửi 1 request đến server).</li>
+<li>Server sẽ tính toán response ứng với mỗi request và gửi lại response cho client giống như giao thức http truyền thống.</li>
+</ol>
+<p>~&gt; Client không chủ động gửi request đến server nhưng javascript của website vẫn luân phiên gửi request đến server và client sẽ nhận response từ server 1 cách bị động.</p>
+<h2>AJAX Long-Polling:</h2>
+<p><img class="aligncenter size-full wp-image-11341" src="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-long-polling.png" alt="ky-thuat-lap-trinh-web-regular-http-13122015-long-polling" width="646" height="364" srcset="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-long-polling.png 646w, http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-long-polling-300x169.png 300w" sizes="(max-width: 646px) 100vw, 646px" /></p><div><ul style="list-style:none;display:inline-block;padding:10px;font-size:14px; text-align: left; border:1px solid #e1e1e1; width:100%; background-color: #f5f5f5;"><li style="margin:0 0 3px 0">
+      <p style="margin:0;"><a target="_blank" style="color:#be5656;text-decoration:none; font-weight: 600;font-size: 14px;" href="https://topdev.vn/detail-jobs/HCM-Project-Manager-1300--2000-2127">[HCM] Project Manager ($1300 - $2000)</a>
+        <span style="color: #488fc5;"> &mdash;&nbsp;Appsters</span>
+
+      </p>
+        
+
+        <li style="margin:0 0 3px 0">
+      <p style="margin:0;"><a target="_blank" style="color:#be5656;text-decoration:none; font-weight: 600;font-size: 14px;" href="https://topdev.vn/detail-jobs/HCM-Experienced-Linux-Developer--Attractive-Salary-2273">[HCM] Experienced Linux Developer | Attractive Salary</a>
+        <span style="color: #488fc5;"> &mdash;&nbsp;DEK Technologies</span>
+
+      </p>
+        
+
+        <li style="margin:0 0 3px 0">
+      <p style="margin:0;"><a target="_blank" style="color:#be5656;text-decoration:none; font-weight: 600;font-size: 14px;" href="https://topdev.vn/detail-jobs/URGENT-Applancer-tuyen-React-Native-Developer-cho-du-an-onsite-2255">[URGENT] Applancer tuyển React Native Developer cho dự án onsite</a>
+        <span style="color: #488fc5;"> &mdash;&nbsp;Applancer Headhunt</span>
+
+      </p>
+        
+
+        <li style="font-size:9px; text-align: right; color:black;margin-bottom: -30px;">
+      <span style="position: relative; bottom:24px;">Jobs by</span>
+      <a target="_blank" href="https://topdev.vn/" style="display: inline-block;">
+        <img width="50" src="https://topdev.vn/app/css/images/logo_new@2x.png">
+      </a>
+    </li></ul></div>
+<ol>
+<li>Client yêu cầu 1 trang web từ server sử dụng “Regular http” (đã nói ở trên).</li>
+<li>Trang web mà client vừa yêu cầu sẽ dùng javascript thực hiện request đến 1 file trên server.</li>
+<li>Server sẽ không gửi response ngay cho client (ứng với request đã gửi) mà sẽ đợi cho đến khi có dữ liệu mới.</li>
+<li>Khi có dữ liệu mới, server sẽ gửi dữ liệu mới đó (response) về cho client.</li>
+<li>Client sau khi nhận dữ liệu mới từ server, ngay lập tức sẽ tiếp tục 1 request khác đến server để bắt đầu lại toàn bộ tiến trình này (bước 3 đến 5).</li>
+</ol>
+<p>~&gt; Client sẽ gửi request đến server, server tiến hành kiếm tra dữ liệu và đến khi nào có dữ liệu mới thì mới gửi response về cho client. Sau đó client lại tiếp tục tự động gửi 1 request mới và đợi dữ liệu mới trả về.</p>
+<h2>HTML5 Server Sent Events (SSE) / Event Source:</h2>
+<p><img class="aligncenter size-full wp-image-11342" src="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-html5.png" alt="ky-thuat-lap-trinh-web-regular-http-13122015-html5" width="646" height="364" srcset="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-html5.png 646w, http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-html5-300x169.png 300w" sizes="(max-width: 646px) 100vw, 646px" /></p>
+<ol>
+<li>Client yêu cầu 1 trang web từ server sử dụng “Regular http” (đã nói ở trên).</li>
+<li>Trang web mà client vừa yêu cầu sẽ dùng javascript mở 1 kết nối đến server.</li>
+<li>Kể từ lúc này server sẽ gửi response trả về cho client mỗi khi có dữ liệu mới.</li>
+</ol>
+<p>~&gt; Tức là client luôn nhận dữ liệu mới theo thời gian thực từ server chỉ với 1 lần request (dữ liệu 1 chiều từ server đến client). Lúc này trên server sẽ thực hiện 1 vòng lặp (loop) sự kiện (bước 1 đến 3) để thực hiện lại nhiều lần quy trình này, tuy nhiên bạn không thể kết nối đến server từ 1 tên miền (domain) khác.</p>
+<h2>HTML5 Websockets:</h2>
+<p><img class="aligncenter size-full wp-image-11343" src="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-socket.png" alt="ky-thuat-lap-trinh-web-regular-http-13122015-socket" width="646" height="364" srcset="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-socket.png 646w, http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-socket-300x169.png 300w" sizes="(max-width: 646px) 100vw, 646px" /></p>
+<ol>
+<li>Client yêu cầu 1 trang web từ server sử dụng “Regular http” (đã nói ở trên).</li>
+<li>Trang web mà client vừa yêu cầu sẽ dùng javascript mở 1 kết nối đến server.</li>
+<li>Bây giờ cả server và client có thể gửi nhận nhiều dữ liệu khác nhau với nhau khi có dữ liệu mới (giống như kiểu 2 bên đang chat với nhau chứ không phải tuân theo qui tắc nào).</li>
+</ol>
+<p>~&gt; Tức là client và server luôn nhận dữ liệu mới theo thời gian thực (2 chiều: server đến client hoặc client đến server). Lúc này trên server sẽ thực hiện 1 vòng lặp (loop) sự kiện (bước 1 đến 3) để thực hiện lại nhiều lần quy trình này và bạn có thể kết nối đến server từ 1 tên miền (domain) khác. Ngoài ra bạn cũng có thể sử dụng websocket server của bên thứ 3 cung cấp (ví dụ: <a href="http://pusher.com/" target="_blank">http://pusher.com/</a>) và việc còn lại là bạn chỉ việc code trên client ( dễ dàng hơn nhiều vì trước đó bạn phải code cả phía server và client).</p>
+<p>Để dễ hiểu hơn, mình xin giải thích thêm cái hình ở trên, hình này minh họa nhiều trường hợp có thể xảy ra khi áp dụng web socket:</p>
+<ul>
+<li>Trường hợp 1: tạo connect với server ~&gt; nhận 2 response từ server.</li>
+<li>Trường hợp 2: tạo connect với server ~&gt; nhận 1 response từ server ~&gt; client gửi tiếp 1 request khác đến server.</li>
+<li>Trường hợp 3: tạo connect với server ~&gt; nhận 2 response từ server ~&gt; server trả về tiếp 1 reponse khác cho client (mặc dù không có request mới nào).</li>
+</ul>
+<h2>Comet:</h2>
+<p><img class="aligncenter size-full wp-image-11344" src="http://static.techtalk.vn/wp-content/uploads/2016/11/ky-thuat-lap-trinh-web-regular-http-13122015-comet.gif" alt="ky-thuat-lap-trinh-web-regular-http-13122015-comet" width="304" height="322" /></p>
+<p>Comet là một thuật ngữ chung mô tả việc server gửi response dữ liệu cho client mà không cần 1 request rõ ràng. Ngoài ra nó còn được biết đến với những cái tên khác như: Ajax push, Reverse Ajax, Two-way-web, HTTP Streaming, HTTP server push. Trên thực tế ứng dụng comet có thể dùng 1 trong 2 kỹ thuật đó là: Streaming hoặc Long-Polling.</p>
+<p>Comet có một sự ưu việt đó là request từ client đến server có thể được giữ trong 1 thời gian dài ( đến khi đạt giới hạn time-out ) để đợi response từ server trả về ( xem hình mô tả ở trên ), và sau đó sẽ tiếp tục gửi request mới để đợi response khác từ server.</p>
+<p>Một ưu điểm lớn nữa của Comet đó là luôn có một liên kết giao tiếp giữa client và server, server có thể gửi response ngay khi request được gửi đến hoặc tích lũy response để gửi 1 lần. Nhưng vì các request tồn tại trong một thời gian dài ( long-lived request ) nên ở server cần một cơ chế đặc biệt để xử lý tất cả request loại này.</p>
+<p>Kỹ thuật Long-Polling mình đã giới thiệu ở trên rồi nên không nhắc lại nữa, còn với streaming bạn có thể hiểu đơn giản thế này: hình thức nó giống với kỹ thuật long-polling nhưng khác là ta chỉ khởi tạo kết nối đến server một lần và gửi nhận dữ liệu thông qua kết nối này chứ không tạo kết nối mới. ( kỹ thuật streaming trên thực tế có thể được ứng dụng để làm web xem phim trực truyến, tải tới đâu coi tới đó và chỉ request đến file phim đúng 1 lần).</p>
+<p style="text-align: right;"><span style="font-size: 10pt;"><em>Techtalk via <a href="https://techmaster.vn/posts/33693/ky-thuat-long-polling-websockets-server-sent-events-comet">Techmaster</a></em></span></p>
+<div class="td-a-rec td-a-rec-id-content_bottom  "><div class="td-all-devices"><a href="http://topdevvn.com/s/e583387bf5" target="_blank"><img src="http://static.techtalk.vn/wp-content/uploads/2016/03/header-techtalk.png"/></a></div></div>        </div>
+
+
+        <footer>
+                        
+            <div class="td-post-source-tags">
+                                            </div>
+
+            <div class="td-post-sharing td-post-sharing-bottom td-with-like"><span class="td-post-share-title">CHIA SẺ</span>
+            <div class="td-default-sharing">
+	            <a class="td-social-sharing-buttons td-social-facebook" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Ftechtalk.vn%2Fgioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" onclick="window.open(this.href, 'mywin','left=50,top=50,width=600,height=350,toolbar=0'); return false;"><i class="td-icon-facebook"></i><div class="td-social-but-text">Facebook</div></a>
+	            <a class="td-social-sharing-buttons td-social-twitter" href="https://twitter.com/intent/tweet?text=Gi%E1%BB%9Bi+thi%E1%BB%87u+k%E1%BB%B9+thu%E1%BA%ADt+Long-Polling%2C+Websockets%2C+Server-Sent+Events%2C+Comet&url=http%3A%2F%2Ftechtalk.vn%2Fgioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html&via=Tech+Talk"><i class="td-icon-twitter"></i><div class="td-social-but-text">Twitter</div></a>
+	            <a class="td-social-sharing-buttons td-social-google" href="http://plus.google.com/share?url=http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" onclick="window.open(this.href, 'mywin','left=50,top=50,width=600,height=350,toolbar=0'); return false;"><i class="td-icon-googleplus"></i></a>
+	            <a class="td-social-sharing-buttons td-social-pinterest" href="http://pinterest.com/pin/create/button/?url=http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html&amp;media=http://techtalk.vn/wp-content/uploads/2016/09/server_01.jpg&description=Gi%E1%BB%9Bi+thi%E1%BB%87u+k%E1%BB%B9+thu%E1%BA%ADt+Long-Polling%2C+Websockets%2C+Server-Sent+Events%2C+Comet" onclick="window.open(this.href, 'mywin','left=50,top=50,width=600,height=350,toolbar=0'); return false;"><i class="td-icon-pinterest"></i></a>
+	            <a class="td-social-sharing-buttons td-social-whatsapp" href="whatsapp://send?text=Gi%E1%BB%9Bi+thi%E1%BB%87u+k%E1%BB%B9+thu%E1%BA%ADt+Long-Polling%2C+Websockets%2C+Server-Sent+Events%2C+Comet%20-%20http%3A%2F%2Ftechtalk.vn%2Fgioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" ><i class="td-icon-whatsapp"></i></a>
+            </div><div class="td-classic-sharing"><ul><li class="td-classic-facebook"><iframe frameBorder="0" src="http://www.facebook.com/plugins/like.php?href=http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html&amp;layout=button_count&amp;show_faces=false&amp;width=105&amp;action=like&amp;colorscheme=light&amp;height=21" style="border:none; overflow:hidden; width:105px; height:21px; background-color:transparent;"></iframe></li><li class="td-classic-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" data-text="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet" data-via="" data-lang="en">tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li></ul></div></div>            <div class="fb-comments" data-href="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" data-numposts="20" width="100%" data-colorscheme="light" data-version="v2.5"></div>
+            <div class="td-block-row td-post-next-prev"><div class="td-block-span6 td-post-prev-post"><div class="td-post-next-prev-content"><span>Bài viết trước</span><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html">Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?</a></div></div><div class="td-next-prev-separator"></div><div class="td-block-span6 td-post-next-post"><div class="td-post-next-prev-content"><span>Bài kế tiếp</span><a href="http://techtalk.vn/more-iphone-development-with-swift.html">More iPhone Development with Swift</a></div></div></div>            <div class="td-author-name vcard author" style="display: none"><span class="fn"><a href="http://techtalk.vn/author/hieu">Hieu Le</a></span></div>	        <span style="display: none;" itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Hieu Le"></span><meta itemprop="datePublished" content="2016-11-06T19:00:23+00:00"><meta itemprop="dateModified" content="2016-11-03T11:08:53+00:00"><meta itemscope itemprop="mainEntityOfPage" itemType="https://schema.org/WebPage" itemid="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html"/><span style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><span style="display: none;" itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="http://static.techtalk.vn/wp-content/uploads/2016/02/logoretina.png"></span><meta itemprop="name" content="Tech Talk"></span><meta itemprop="headline " content="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet"><span style="display: none;" itemprop="image" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="http://static.techtalk.vn/wp-content/uploads/2016/09/server_01.jpg"><meta itemprop="width" content="474"><meta itemprop="height" content="316"></span>        </footer>
+
+    </article> <!-- /.post -->
+
+    
+                            </div>
+                        </div>
+                        <div class="td-pb-span4 td-main-sidebar" role="complementary">
+                            <div class="td-ss-main-sidebar">
+                                <div class="td-a-rec td-a-rec-id-sidebar  "><div class="td-all-devices"><a href="http://topdevvn.com/s/e583387bf5" target="_blank"><img src="http://static.techtalk.vn/wp-content/uploads/2016/03/side-bar.png"/></a></div></div><div class="td_block_wrap td_block_7 td_block_widget td_uid_15_581f76171e7d6_rand td_with_ajax_pagination td-pb-border-top"  data-td-block-uid="td_uid_15_581f76171e7d6" >
+<style scoped>
+.td_uid_15_581f76171e7d6_rand .td_module_wrap:hover .entry-title a,
+            .td_uid_15_581f76171e7d6_rand a.td-pulldown-filter-link:hover,
+            .td_uid_15_581f76171e7d6_rand .td-subcat-item a:hover,
+            .td_uid_15_581f76171e7d6_rand .td-subcat-item .td-cur-simple-item,
+            .td_uid_15_581f76171e7d6_rand .td_quote_on_blocks,
+            .td_uid_15_581f76171e7d6_rand .td-opacity-cat .td-post-category:hover,
+            .td_uid_15_581f76171e7d6_rand .td-opacity-read .td-read-more a:hover,
+            .td_uid_15_581f76171e7d6_rand .td-opacity-author .td-post-author-name a:hover,
+            .td_uid_15_581f76171e7d6_rand .td-instagram-user a {
+                color: #EC1F27;
+            }
+
+            .td_uid_15_581f76171e7d6_rand .td-next-prev-wrap a:hover,
+            .td_uid_15_581f76171e7d6_rand .td-load-more-wrap a:hover {
+                background-color: #EC1F27;
+                border-color: #EC1F27;
+            }
+
+            .td_uid_15_581f76171e7d6_rand .block-title span,
+            .td_uid_15_581f76171e7d6_rand .td-trending-now-title,
+            .td_uid_15_581f76171e7d6_rand .block-title a,
+            .td_uid_15_581f76171e7d6_rand .td-read-more a,
+            .td_uid_15_581f76171e7d6_rand .td-weather-information:before,
+            .td_uid_15_581f76171e7d6_rand .td-weather-week:before,
+            .td_uid_15_581f76171e7d6_rand .td-subcat-dropdown:hover .td-subcat-more,
+            .td_uid_15_581f76171e7d6_rand .td-exchange-header:before,
+            .td_uid_15_581f76171e7d6_rand .td-post-category:hover {
+                background-color: #EC1F27;
+            }
+
+            .td_uid_15_581f76171e7d6_rand .block-title {
+                border-color: #EC1F27;
+            }
+
+            
+            .td_uid_15_581f76171e7d6_rand .block-title span,
+            .td_uid_15_581f76171e7d6_rand .td-trending-now-title,
+            .td_uid_15_581f76171e7d6_rand .block-title a {
+                color: #;
+            }
+</style><script>var block_td_uid_15_581f76171e7d6 = new tdBlock();
+block_td_uid_15_581f76171e7d6.id = "td_uid_15_581f76171e7d6";
+block_td_uid_15_581f76171e7d6.atts = '{"limit":"5","sort":"","post_ids":"","tag_slug":"","autors_id":"","installed_post_types":"","category_id":"1","category_ids":"","custom_title":"M\u1edaI NH\u1ea4T","custom_url":"","show_child_cat":"","sub_cat_ajax":"","ajax_pagination":"next_prev","header_color":"#EC1F27","header_text_color":"#","ajax_pagination_infinite_stop":"","td_column_number":1,"td_ajax_preloading":"","td_ajax_filter_type":"","td_ajax_filter_ids":"","td_filter_default_txt":"All","color_preset":"","border_top":"","class":"td_block_widget td_uid_15_581f76171e7d6_rand","offset":"","css":"","live_filter":"","live_filter_cur_post_id":"","live_filter_cur_post_author":""}';
+block_td_uid_15_581f76171e7d6.td_column_number = "1";
+block_td_uid_15_581f76171e7d6.block_type = "td_block_7";
+block_td_uid_15_581f76171e7d6.post_count = "5";
+block_td_uid_15_581f76171e7d6.found_posts = "847";
+block_td_uid_15_581f76171e7d6.header_color = "#EC1F27";
+block_td_uid_15_581f76171e7d6.ajax_pagination_infinite_stop = "";
+block_td_uid_15_581f76171e7d6.max_num_pages = "170";
+tdBlocksArray.push(block_td_uid_15_581f76171e7d6);
+</script><div class="td-block-title-wrap"><h4 class="block-title"><span>MỚI NHẤT</span></h4></div><div id=td_uid_15_581f76171e7d6 class="td_block_inner">
+
+	<div class="td-block-span12">
+
+        <div class="td_module_6 td_module_wrap td-animation-stack">
+
+        <div class="td-module-thumb"><a href="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" rel="bookmark" title="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet"><img width="100" height="70" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/09/server_01-100x70.jpg" alt="" title="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet"/></a></div>
+        <div class="item-details">
+            <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/gioi-thieu-ky-thuat-long-polling-websockets-server-sent-events-comet.html" rel="bookmark" title="Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet">Giới thiệu kỹ thuật Long-Polling, Websockets, Server-Sent Events, Comet</a></h3>            <div class="td-module-meta-info">
+                                                <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-11-06T19:00:23+00:00" >November 6, 2016</time></span>                            </div>
+        </div>
+
+        </div>
+
+        
+	</div> <!-- ./td-block-span12 -->
+
+	<div class="td-block-span12">
+
+        <div class="td_module_6 td_module_wrap td-animation-stack">
+
+        <div class="td-module-thumb"><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html" rel="bookmark" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?"><img width="100" height="70" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/03/ChevroniOS8_Swift-720x424-100x70.jpg" alt="" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?"/></a></div>
+        <div class="item-details">
+            <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/tai-sao-cac-ung-dung-lon-van-chua-chuyen-qua-swift.html" rel="bookmark" title="Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?">Tại sao các ứng dụng lớn vẫn chưa chuyển qua Swift?</a></h3>            <div class="td-module-meta-info">
+                                                <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-11-06T15:00:59+00:00" >November 6, 2016</time></span>                            </div>
+        </div>
+
+        </div>
+
+        
+	</div> <!-- ./td-block-span12 -->
+
+	<div class="td-block-span12">
+
+        <div class="td_module_6 td_module_wrap td-animation-stack">
+
+        <div class="td-module-thumb"><a href="http://techtalk.vn/cai-toi-ca-nhan-khi-teamwork.html" rel="bookmark" title="Cái tôi cá nhân khi teamwork"><img width="100" height="70" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/photo-1438354886727-070458b3b5cf-100x70.jpg" alt="" title="Cái tôi cá nhân khi teamwork"/></a></div>
+        <div class="item-details">
+            <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/cai-toi-ca-nhan-khi-teamwork.html" rel="bookmark" title="Cái tôi cá nhân khi teamwork">Cái tôi cá nhân khi teamwork</a></h3>            <div class="td-module-meta-info">
+                                                <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-11-05T19:00:43+00:00" >November 5, 2016</time></span>                            </div>
+        </div>
+
+        </div>
+
+        
+	</div> <!-- ./td-block-span12 -->
+
+	<div class="td-block-span12">
+
+        <div class="td_module_6 td_module_wrap td-animation-stack">
+
+        <div class="td-module-thumb"><a href="http://techtalk.vn/tan-man-mot-bai-toan-trong-project.html" rel="bookmark" title="Tản mạn một bài toán trong Project"><img width="100" height="70" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/computer-programmer-100x70.jpg" alt="" title="Tản mạn một bài toán trong Project"/></a></div>
+        <div class="item-details">
+            <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/tan-man-mot-bai-toan-trong-project.html" rel="bookmark" title="Tản mạn một bài toán trong Project">Tản mạn một bài toán trong Project</a></h3>            <div class="td-module-meta-info">
+                                                <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-11-05T14:00:57+00:00" >November 5, 2016</time></span>                            </div>
+        </div>
+
+        </div>
+
+        
+	</div> <!-- ./td-block-span12 -->
+
+	<div class="td-block-span12">
+
+        <div class="td_module_6 td_module_wrap td-animation-stack">
+
+        <div class="td-module-thumb"><a href="http://techtalk.vn/21-nguon-mo-swift.html" rel="bookmark" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift"><img width="100" height="70" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/11/swift-open-source-100x70.png" alt="" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift"/></a></div>
+        <div class="item-details">
+            <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/21-nguon-mo-swift.html" rel="bookmark" title="21 nguồn mở tuyệt vời để viết các ứng dụng iOS bằng Swift">21 nguồn mở tuyệt vời để viết các ứng dụng iOS...</a></h3>            <div class="td-module-meta-info">
+                                                <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-11-05T13:00:53+00:00" >November 5, 2016</time></span>                            </div>
+        </div>
+
+        </div>
+
+        
+	</div> <!-- ./td-block-span12 --></div><div class="td-next-prev-wrap"><a href="#" class="td-ajax-prev-page ajax-page-disabled" id="prev-page-td_uid_15_581f76171e7d6" data-td_block_id="td_uid_15_581f76171e7d6"><i class="td-icon-font td-icon-menu-left"></i></a><a href="#"  class="td-ajax-next-page" id="next-page-td_uid_15_581f76171e7d6" data-td_block_id="td_uid_15_581f76171e7d6"><i class="td-icon-font td-icon-menu-right"></i></a></div></div> <!-- ./block --><div class="td_block_wrap td_block_18 td_block_widget td_uid_16_581f7617249e3_rand td_with_ajax_pagination td-pb-border-top"  data-td-block-uid="td_uid_16_581f7617249e3" >
+<style scoped>
+.td_uid_16_581f7617249e3_rand .td_module_wrap:hover .entry-title a,
+            .td_uid_16_581f7617249e3_rand a.td-pulldown-filter-link:hover,
+            .td_uid_16_581f7617249e3_rand .td-subcat-item a:hover,
+            .td_uid_16_581f7617249e3_rand .td-subcat-item .td-cur-simple-item,
+            .td_uid_16_581f7617249e3_rand .td_quote_on_blocks,
+            .td_uid_16_581f7617249e3_rand .td-opacity-cat .td-post-category:hover,
+            .td_uid_16_581f7617249e3_rand .td-opacity-read .td-read-more a:hover,
+            .td_uid_16_581f7617249e3_rand .td-opacity-author .td-post-author-name a:hover,
+            .td_uid_16_581f7617249e3_rand .td-instagram-user a {
+                color: #EC1F27;
+            }
+
+            .td_uid_16_581f7617249e3_rand .td-next-prev-wrap a:hover,
+            .td_uid_16_581f7617249e3_rand .td-load-more-wrap a:hover {
+                background-color: #EC1F27;
+                border-color: #EC1F27;
+            }
+
+            .td_uid_16_581f7617249e3_rand .block-title span,
+            .td_uid_16_581f7617249e3_rand .td-trending-now-title,
+            .td_uid_16_581f7617249e3_rand .block-title a,
+            .td_uid_16_581f7617249e3_rand .td-read-more a,
+            .td_uid_16_581f7617249e3_rand .td-weather-information:before,
+            .td_uid_16_581f7617249e3_rand .td-weather-week:before,
+            .td_uid_16_581f7617249e3_rand .td-subcat-dropdown:hover .td-subcat-more,
+            .td_uid_16_581f7617249e3_rand .td-exchange-header:before,
+            .td_uid_16_581f7617249e3_rand .td-post-category:hover {
+                background-color: #EC1F27;
+            }
+
+            .td_uid_16_581f7617249e3_rand .block-title {
+                border-color: #EC1F27;
+            }
+
+            
+            .td_uid_16_581f7617249e3_rand .block-title span,
+            .td_uid_16_581f7617249e3_rand .td-trending-now-title,
+            .td_uid_16_581f7617249e3_rand .block-title a {
+                color: #;
+            }
+</style><script>var block_td_uid_16_581f7617249e3 = new tdBlock();
+block_td_uid_16_581f7617249e3.id = "td_uid_16_581f7617249e3";
+block_td_uid_16_581f7617249e3.atts = '{"limit":"5","sort":"popular7","post_ids":"","tag_slug":"","autors_id":"","installed_post_types":"","category_id":"","category_ids":"","custom_title":"\u0110\u01af\u1ee2C QUAN T\u00c2M","custom_url":"","show_child_cat":"","sub_cat_ajax":"","ajax_pagination":"next_prev","header_color":"#EC1F27","header_text_color":"#","ajax_pagination_infinite_stop":"","td_column_number":1,"td_ajax_preloading":"","td_ajax_filter_type":"","td_ajax_filter_ids":"","td_filter_default_txt":"All","color_preset":"","border_top":"","class":"td_block_widget td_uid_16_581f7617249e3_rand","offset":"","css":"","live_filter":"","live_filter_cur_post_id":"","live_filter_cur_post_author":""}';
+block_td_uid_16_581f7617249e3.td_column_number = "1";
+block_td_uid_16_581f7617249e3.block_type = "td_block_18";
+block_td_uid_16_581f7617249e3.post_count = "5";
+block_td_uid_16_581f7617249e3.found_posts = "1270";
+block_td_uid_16_581f7617249e3.header_color = "#EC1F27";
+block_td_uid_16_581f7617249e3.ajax_pagination_infinite_stop = "";
+block_td_uid_16_581f7617249e3.max_num_pages = "254";
+tdBlocksArray.push(block_td_uid_16_581f7617249e3);
+</script><div class="td-block-title-wrap"><h4 class="block-title"><span>ĐƯỢC QUAN TÂM</span></h4></div><div id=td_uid_16_581f7617249e3 class="td_block_inner td-column-1">
+        <div class="td_module_mx8 td_module_wrap td-animation-stack">
+            <div class="meta-info-container">
+                <div class="td-module-thumb"><a href="http://techtalk.vn/nhung-plugin-sublime-text-can-thiet-cho-web-developers.html" rel="bookmark" title="Những Plugin sublime text cần thiết cho web Developers"><img width="696" height="385" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/08/the-coder-696x385.jpg" alt="" title="Những Plugin sublime text cần thiết cho web Developers"/></a></div>
+                <div class="td-module-meta-info">
+                    <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/nhung-plugin-sublime-text-can-thiet-cho-web-developers.html" rel="bookmark" title="Những Plugin sublime text cần thiết cho web Developers">Những Plugin sublime text cần thiết cho web Developers</a></h3>                                        <span class="td-author-date">
+                                                <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-10-31T08:00:10+00:00" >October 31, 2016</time></span>                                            </span>
+                </div>
+            </div>
+
+        </div>
+
+        
+        <div class="td_module_mx2 td_module_wrap td-animation-stack">
+
+            <div class="td-module-thumb"><a href="http://techtalk.vn/huong-dan-thiet-ke-api-nhieu-nguoi-dung.html" rel="bookmark" title="Hướng dẫn thiết kế API thu hút nhiều người dùng hơn"><img width="80" height="60" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/1-wSKrrW74dUcgu42OqwA1BQ-80x60.png" alt="" title="Hướng dẫn thiết kế API thu hút nhiều người dùng hơn"/></a></div>
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/huong-dan-thiet-ke-api-nhieu-nguoi-dung.html" rel="bookmark" title="Hướng dẫn thiết kế API thu hút nhiều người dùng hơn">Hướng dẫn thiết kế API thu hút nhiều người dùng hơn</a></h3>                <div class="td-module-meta-info">
+                                                            <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-10-31T08:40:39+00:00" >October 31, 2016</time></span>                                    </div>
+            </div>
+
+        </div>
+
+        
+        <div class="td_module_mx2 td_module_wrap td-animation-stack">
+
+            <div class="td-module-thumb"><a href="http://techtalk.vn/neu-dev-khong-muon-that-nghiep-hay-ren-luyen-10-ky-nang-nay.html" rel="bookmark" title="Nếu dev không muốn thất nghiệp hãy rèn luyện 10 kỹ năng này"><img width="80" height="60" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/dich-vu-dspl2-80x60.jpg" alt="" title="Nếu dev không muốn thất nghiệp hãy rèn luyện 10 kỹ năng này"/></a></div>
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/neu-dev-khong-muon-that-nghiep-hay-ren-luyen-10-ky-nang-nay.html" rel="bookmark" title="Nếu dev không muốn thất nghiệp hãy rèn luyện 10 kỹ năng này">Nếu dev không muốn thất nghiệp hãy rèn luyện 10 kỹ năng này</a></h3>                <div class="td-module-meta-info">
+                                                            <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-11-01T15:00:14+00:00" >November 1, 2016</time></span>                                    </div>
+            </div>
+
+        </div>
+
+        
+        <div class="td_module_mx2 td_module_wrap td-animation-stack">
+
+            <div class="td-module-thumb"><a href="http://techtalk.vn/clean-code-ma-sach-va-con-duong-tro-thanh-better-developer.html" rel="bookmark" title="Clean code &#8211; mã sạch và con đường trở thành better developer"><img width="80" height="60" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/maxresdefault-2-80x60.jpg" alt="" title="Clean code &#8211; mã sạch và con đường trở thành better developer"/></a></div>
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/clean-code-ma-sach-va-con-duong-tro-thanh-better-developer.html" rel="bookmark" title="Clean code &#8211; mã sạch và con đường trở thành better developer">Clean code &#8211; mã sạch và con đường trở thành better developer</a></h3>                <div class="td-module-meta-info">
+                                                            <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-11-02T14:15:02+00:00" >November 2, 2016</time></span>                                    </div>
+            </div>
+
+        </div>
+
+        
+        <div class="td_module_mx2 td_module_wrap td-animation-stack">
+
+            <div class="td-module-thumb"><a href="http://techtalk.vn/css-code-generator-mien-phi-tao-filter-anh-nhu-instagram.html" rel="bookmark" title="CSS Code Generator Miễn Phí: Tạo Filter Ảnh Như Instagram"><img width="80" height="60" class="entry-thumb" src="http://static.techtalk.vn/wp-content/uploads/2016/10/code-generators-instagram-filters-80x60.jpg" alt="" title="CSS Code Generator Miễn Phí: Tạo Filter Ảnh Như Instagram"/></a></div>
+            <div class="item-details">
+                <h3 class="entry-title td-module-title"><a href="http://techtalk.vn/css-code-generator-mien-phi-tao-filter-anh-nhu-instagram.html" rel="bookmark" title="CSS Code Generator Miễn Phí: Tạo Filter Ảnh Như Instagram">CSS Code Generator Miễn Phí: Tạo Filter Ảnh Như Instagram</a></h3>                <div class="td-module-meta-info">
+                                                            <span class="td-post-date"><time class="entry-date updated td-module-date" datetime="2016-10-31T19:00:22+00:00" >October 31, 2016</time></span>                                    </div>
+            </div>
+
+        </div>
+
+        </div><div class="td-next-prev-wrap"><a href="#" class="td-ajax-prev-page ajax-page-disabled" id="prev-page-td_uid_16_581f7617249e3" data-td_block_id="td_uid_16_581f7617249e3"><i class="td-icon-font td-icon-menu-left"></i></a><a href="#"  class="td-ajax-next-page" id="next-page-td_uid_16_581f7617249e3" data-td_block_id="td_uid_16_581f7617249e3"><i class="td-icon-font td-icon-menu-right"></i></a></div></div> <!-- ./block -->                            </div>
+                        </div>
+                            </div> <!-- /.td-pb-row -->
+    </div> <!-- /.td-container -->
+</div> <!-- /.td-main-content-wrap -->
+
+
+<!-- Footer -->
+<div class="td-footer-wrapper">
+    <div class="td-container">
+
+	    <div class="td-pb-row">
+		    <div class="td-pb-span12">
+                		    </div>
+	    </div>
+
+        <div class="td-pb-row">
+
+            <div class="td-pb-span12">
+                            </div>
+        </div>
+    </div>
+
+    <div class="td-footer-bottom-full">
+        <div class="td-container">
+            <div class="td-pb-row">
+                <div class="td-pb-span3"><aside class="footer-logo-wrap"><a href="http://techtalk.vn/"><img src="http://static.techtalk.vn/wp-content/uploads/2016/02/logoretina-300x99.png" alt="" title=""/></a></aside></div><div class="td-pb-span5"><aside class="footer-text-wrap"><div class="block-title"><span>VỀ CHÚNG TÔI</span></div>Techtalk.vn là trang thông tin chuyên về công nghệ và lập trình. Tập trung cung cấp các nội dung liên quan đến công nghệ mới, các tools, tuts hỗ trợ cho lập trình viên nói riêng và người yêu công nghệ nói chung.<div class="footer-email-wrap">Liên hệ: <a href="mailto:contact@techtalk.vn">contact@techtalk.vn</a></div></aside></div><div class="td-pb-span4"><aside class="footer-social-wrap td-social-style-2"><div class="block-title"><span>THEO CHÚNG TÔI</span></div>
+        <span class="td-social-icon-wrap">
+            <a target="_blank" href="https://www.facebook.com/Techtalkvietnam/" title="Facebook">
+                <i class="td-icon-font td-icon-facebook"></i>
+            </a>
+        </span>
+        <span class="td-social-icon-wrap">
+            <a target="_blank" href="https://www.youtube.com/channel/UC-T4to_yv4ocCOd6AVagvEg" title="Youtube">
+                <i class="td-icon-font td-icon-youtube"></i>
+            </a>
+        </span></aside></div>            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sub Footer -->
+    <div class="td-sub-footer-container">
+        <div class="td-container">
+            <div class="td-pb-row">
+                <div class="td-pb-span7 td-sub-footer-menu">
+                                        </div>
+
+                <div class="td-pb-span5 td-sub-footer-copy">
+                    &copy; Copyright 2016 - Techtalk by IDE                </div>
+            </div>
+        </div>
+    </div>
+    </div><!--close content div-->
+</div><!--close td-outer-wrap-->
+
+
+
+    <!--
+
+        Theme: Newspaper by tagDiv 2016
+        Version: 7.3 (rara)
+        Deploy mode: deploy
+        Speed booster: v4.5
+
+        uid: 581f761739574
+    -->
+
+    <script type='text/javascript' src='http://static.techtalk.vn/wp-content/themes/Newspaper/js/tagdiv_theme.min.js?ver=7.3'></script>
+<script type='text/javascript' src='http://techtalk.vn/wp-includes/js/comment-reply.min.js?ver=4.6.1'></script>
+<script type='text/javascript' src='http://techtalk.vn/wp-includes/js/wp-embed.min.js?ver=4.6.1'></script>
+
+<!-- JS generated by theme -->
+
+<script>
+    
+
+                jQuery().ready(function jQuery_ready() {
+                    tdAjaxCount.tdGetViewsCountsAjax("post","[11339]");
+                });
+            
+
+	
+
+		(function(){
+			var html_jquery_obj = jQuery('html');
+
+			if (html_jquery_obj.length && (html_jquery_obj.is('.ie8') || html_jquery_obj.is('.ie9'))) {
+
+				var path = 'http://static.techtalk.vn/wp-content/themes/Newspaper-child/style.css';
+
+				jQuery.get(path, function(data) {
+
+					var str_split_separator = '#td_css_split_separator';
+					var arr_splits = data.split(str_split_separator);
+					var arr_length = arr_splits.length;
+
+					if (arr_length > 1) {
+
+						var dir_path = 'http://static.techtalk.vn/wp-content/themes/Newspaper';
+						var splited_css = '';
+
+						for (var i = 0; i < arr_length; i++) {
+							if (i > 0) {
+								arr_splits[i] = str_split_separator + ' ' + arr_splits[i];
+							}
+							//jQuery('head').append('<style>' + arr_splits[i] + '</style>');
+
+							var formated_str = arr_splits[i].replace(/\surl\(\'(?!data\:)/gi, function regex_function(str) {
+								return ' url(\'' + dir_path + '/' + str.replace(/url\(\'/gi, '').replace(/^\s+|\s+$/gm,'');
+							});
+
+							splited_css += "<style>" + formated_str + "</style>";
+						}
+
+						var td_theme_css = jQuery('link#td-theme-css');
+
+						if (td_theme_css.length) {
+							td_theme_css.after(splited_css);
+						}
+					}
+				});
+			}
+		})();
+
+	
+	
+</script>
+
+
+<!-- Header style compiled by theme -->
+
+<style>
+    
+.td-header-wrap .black-menu .sf-menu > .current-menu-item > a,
+    .td-header-wrap .black-menu .sf-menu > .current-menu-ancestor > a,
+    .td-header-wrap .black-menu .sf-menu > .current-category-ancestor > a,
+    .td-header-wrap .black-menu .sf-menu > li > a:hover,
+    .td-header-wrap .black-menu .sf-menu > .sfHover > a,
+    .td-header-style-12 .td-header-menu-wrap-full,
+    .sf-menu > .current-menu-item > a:after,
+    .sf-menu > .current-menu-ancestor > a:after,
+    .sf-menu > .current-category-ancestor > a:after,
+    .sf-menu > li:hover > a:after,
+    .sf-menu > .sfHover > a:after,
+    .sf-menu ul .td-menu-item > a:hover,
+    .sf-menu ul .sfHover > a,
+    .sf-menu ul .current-menu-ancestor > a,
+    .sf-menu ul .current-category-ancestor > a,
+    .sf-menu ul .current-menu-item > a,
+    .td-header-style-12 .td-affix,
+    .header-search-wrap .td-drop-down-search:after,
+    .header-search-wrap .td-drop-down-search .btn:hover,
+    input[type=submit]:hover,
+    .td-read-more a,
+    .td-post-category:hover,
+    .td-grid-style-1.td-hover-1 .td-big-grid-post:hover .td-post-category,
+    .td-grid-style-5.td-hover-1 .td-big-grid-post:hover .td-post-category,
+    .td_top_authors .td-active .td-author-post-count,
+    .td_top_authors .td-active .td-author-comments-count,
+    .td_top_authors .td_mod_wrap:hover .td-author-post-count,
+    .td_top_authors .td_mod_wrap:hover .td-author-comments-count,
+    .td-404-sub-sub-title a:hover,
+    .td-search-form-widget .wpb_button:hover,
+    .td-rating-bar-wrap div,
+    .td_category_template_3 .td-current-sub-category,
+    .dropcap,
+    .td_wrapper_video_playlist .td_video_controls_playlist_wrapper,
+    .wpb_default,
+    .wpb_default:hover,
+    .td-left-smart-list:hover,
+    .td-right-smart-list:hover,
+    .woocommerce-checkout .woocommerce input.button:hover,
+    .woocommerce-page .woocommerce a.button:hover,
+    .woocommerce-account div.woocommerce .button:hover,
+    #bbpress-forums button:hover,
+    .bbp_widget_login .button:hover,
+    .td-footer-wrapper .td-post-category,
+    .td-footer-wrapper .widget_product_search input[type="submit"]:hover,
+    .woocommerce .product a.button:hover,
+    .woocommerce .product #respond input#submit:hover,
+    .woocommerce .checkout input#place_order:hover,
+    .woocommerce .woocommerce.widget .button:hover,
+    .single-product .product .summary .cart .button:hover,
+    .woocommerce-cart .woocommerce table.cart .button:hover,
+    .woocommerce-cart .woocommerce .shipping-calculator-form .button:hover,
+    .td-next-prev-wrap a:hover,
+    .td-load-more-wrap a:hover,
+    .td-post-small-box a:hover,
+    .page-nav .current,
+    .page-nav:first-child > div,
+    .td_category_template_8 .td-category-header .td-category a.td-current-sub-category,
+    .td_category_template_4 .td-category-siblings .td-category a:hover,
+    #bbpress-forums .bbp-pagination .current,
+    #bbpress-forums #bbp-single-user-details #bbp-user-navigation li.current a,
+    .td-theme-slider:hover .slide-meta-cat a,
+    a.vc_btn-black:hover,
+    .td-trending-now-wrapper:hover .td-trending-now-title,
+    .td-scroll-up,
+    .td-smart-list-button:hover,
+    .td-weather-information:before,
+    .td-weather-week:before,
+    .td_block_exchange .td-exchange-header:before,
+    .td_block_big_grid_9.td-grid-style-1 .td-post-category,
+    .td_block_big_grid_9.td-grid-style-5 .td-post-category,
+    .td-grid-style-6.td-hover-1 .td-module-thumb:after {
+        background-color: #ec1f27;
+    }
+
+    .woocommerce .woocommerce-message .button:hover,
+    .woocommerce .woocommerce-error .button:hover,
+    .woocommerce .woocommerce-info .button:hover {
+        background-color: #ec1f27 !important;
+    }
+
+    .woocommerce .product .onsale,
+    .woocommerce.widget .ui-slider .ui-slider-handle {
+        background: none #ec1f27;
+    }
+
+    .woocommerce.widget.widget_layered_nav_filters ul li a {
+        background: none repeat scroll 0 0 #ec1f27 !important;
+    }
+
+    a,
+    cite a:hover,
+    .td_mega_menu_sub_cats .cur-sub-cat,
+    .td-mega-span h3 a:hover,
+    .td_mod_mega_menu:hover .entry-title a,
+    .header-search-wrap .result-msg a:hover,
+    .top-header-menu li a:hover,
+    .top-header-menu .current-menu-item > a,
+    .top-header-menu .current-menu-ancestor > a,
+    .top-header-menu .current-category-ancestor > a,
+    .td-social-icon-wrap > a:hover,
+    .td-header-sp-top-widget .td-social-icon-wrap a:hover,
+    .td-page-content blockquote p,
+    .td-post-content blockquote p,
+    .mce-content-body blockquote p,
+    .comment-content blockquote p,
+    .wpb_text_column blockquote p,
+    .td_block_text_with_title blockquote p,
+    .td_module_wrap:hover .entry-title a,
+    .td-subcat-filter .td-subcat-list a:hover,
+    .td-subcat-filter .td-subcat-dropdown a:hover,
+    .td_quote_on_blocks,
+    .dropcap2,
+    .dropcap3,
+    .td_top_authors .td-active .td-authors-name a,
+    .td_top_authors .td_mod_wrap:hover .td-authors-name a,
+    .td-post-next-prev-content a:hover,
+    .author-box-wrap .td-author-social a:hover,
+    .td-author-name a:hover,
+    .td-author-url a:hover,
+    .td_mod_related_posts:hover h3 > a,
+    .td-post-template-11 .td-related-title .td-related-left:hover,
+    .td-post-template-11 .td-related-title .td-related-right:hover,
+    .td-post-template-11 .td-related-title .td-cur-simple-item,
+    .td-post-template-11 .td_block_related_posts .td-next-prev-wrap a:hover,
+    .comment-reply-link:hover,
+    .logged-in-as a:hover,
+    #cancel-comment-reply-link:hover,
+    .td-search-query,
+    .td-category-header .td-pulldown-category-filter-link:hover,
+    .td-category-siblings .td-subcat-dropdown a:hover,
+    .td-category-siblings .td-subcat-dropdown a.td-current-sub-category,
+    .widget a:hover,
+    .widget_calendar tfoot a:hover,
+    .woocommerce a.added_to_cart:hover,
+    #bbpress-forums li.bbp-header .bbp-reply-content span a:hover,
+    #bbpress-forums .bbp-forum-freshness a:hover,
+    #bbpress-forums .bbp-topic-freshness a:hover,
+    #bbpress-forums .bbp-forums-list li a:hover,
+    #bbpress-forums .bbp-forum-title:hover,
+    #bbpress-forums .bbp-topic-permalink:hover,
+    #bbpress-forums .bbp-topic-started-by a:hover,
+    #bbpress-forums .bbp-topic-started-in a:hover,
+    #bbpress-forums .bbp-body .super-sticky li.bbp-topic-title .bbp-topic-permalink,
+    #bbpress-forums .bbp-body .sticky li.bbp-topic-title .bbp-topic-permalink,
+    .widget_display_replies .bbp-author-name,
+    .widget_display_topics .bbp-author-name,
+    .footer-text-wrap .footer-email-wrap a,
+    .td-subfooter-menu li a:hover,
+    .footer-social-wrap a:hover,
+    a.vc_btn-black:hover,
+    .td-smart-list-dropdown-wrap .td-smart-list-button:hover,
+    .td_module_17 .td-read-more a:hover,
+    .td_module_18 .td-read-more a:hover,
+    .td_module_19 .td-post-author-name a:hover,
+    .td-instagram-user a {
+        color: #ec1f27;
+    }
+
+    a.vc_btn-black.vc_btn_square_outlined:hover,
+    a.vc_btn-black.vc_btn_outlined:hover,
+    .td-mega-menu-page .wpb_content_element ul li a:hover {
+        color: #ec1f27 !important;
+    }
+
+    .td-next-prev-wrap a:hover,
+    .td-load-more-wrap a:hover,
+    .td-post-small-box a:hover,
+    .page-nav .current,
+    .page-nav:first-child > div,
+    .td_category_template_8 .td-category-header .td-category a.td-current-sub-category,
+    .td_category_template_4 .td-category-siblings .td-category a:hover,
+    #bbpress-forums .bbp-pagination .current,
+    .post .td_quote_box,
+    .page .td_quote_box,
+    a.vc_btn-black:hover {
+        border-color: #ec1f27;
+    }
+
+    .td_wrapper_video_playlist .td_video_currently_playing:after {
+        border-color: #ec1f27 !important;
+    }
+
+    .header-search-wrap .td-drop-down-search:before {
+        border-color: transparent transparent #ec1f27 transparent;
+    }
+
+    .block-title > span,
+    .block-title > a,
+    .block-title > label,
+    .widgettitle,
+    .widgettitle:after,
+    .td-trending-now-title,
+    .td-trending-now-wrapper:hover .td-trending-now-title,
+    .wpb_tabs li.ui-tabs-active a,
+    .wpb_tabs li:hover a,
+    .vc_tta-container .vc_tta-color-grey.vc_tta-tabs-position-top.vc_tta-style-classic .vc_tta-tabs-container .vc_tta-tab.vc_active > a,
+    .vc_tta-container .vc_tta-color-grey.vc_tta-tabs-position-top.vc_tta-style-classic .vc_tta-tabs-container .vc_tta-tab:hover > a,
+    .td-related-title .td-cur-simple-item,
+    .woocommerce .product .products h2,
+    .td-subcat-filter .td-subcat-dropdown:hover .td-subcat-more {
+    	background-color: #ec1f27;
+    }
+
+    .woocommerce div.product .woocommerce-tabs ul.tabs li.active {
+    	background-color: #ec1f27 !important;
+    }
+
+    .block-title,
+    .td-related-title,
+    .wpb_tabs .wpb_tabs_nav,
+    .vc_tta-container .vc_tta-color-grey.vc_tta-tabs-position-top.vc_tta-style-classic .vc_tta-tabs-container,
+    .woocommerce div.product .woocommerce-tabs ul.tabs:before {
+        border-color: #ec1f27;
+    }
+    .td_block_wrap .td-subcat-item .td-cur-simple-item {
+	    color: #ec1f27;
+	}
+
+
+    
+    .td-grid-style-4 .entry-title
+    {
+        background-color: rgba(236, 31, 39, 0.7);
+    }
+
+    
+    .block-title > span,
+    .block-title > a,
+    .block-title > label,
+    .widgettitle,
+    .widgettitle:after,
+    .td-trending-now-title,
+    .td-trending-now-wrapper:hover .td-trending-now-title,
+    .wpb_tabs li.ui-tabs-active a,
+    .wpb_tabs li:hover a,
+    .vc_tta-container .vc_tta-color-grey.vc_tta-tabs-position-top.vc_tta-style-classic .vc_tta-tabs-container .vc_tta-tab.vc_active > a,
+    .vc_tta-container .vc_tta-color-grey.vc_tta-tabs-position-top.vc_tta-style-classic .vc_tta-tabs-container .vc_tta-tab:hover > a,
+    .td-related-title .td-cur-simple-item,
+    .woocommerce .product .products h2,
+    .td-subcat-filter .td-subcat-dropdown:hover .td-subcat-more,
+    .td-weather-information:before,
+    .td-weather-week:before,
+    .td_block_exchange .td-exchange-header:before {
+        background-color: #222222;
+    }
+
+    .woocommerce div.product .woocommerce-tabs ul.tabs li.active {
+    	background-color: #222222 !important;
+    }
+
+    .block-title,
+    .td-related-title,
+    .wpb_tabs .wpb_tabs_nav,
+    .vc_tta-container .vc_tta-color-grey.vc_tta-tabs-position-top.vc_tta-style-classic .vc_tta-tabs-container,
+    .woocommerce div.product .woocommerce-tabs ul.tabs:before {
+        border-color: #222222;
+    }
+
+    
+    .top-header-menu .current-menu-item > a,
+    .top-header-menu .current-menu-ancestor > a,
+    .top-header-menu .current-category-ancestor > a,
+    .top-header-menu li a:hover {
+        color: #ec1f27;
+    }
+
+    
+    .td-header-wrap .td-header-menu-wrap .sf-menu > li > a,
+    .td-header-wrap .header-search-wrap .td-icon-search {
+        color: #222222;
+    }
+
+
+    
+    @media (max-width: 767px) {
+        body .td-header-wrap .td-header-main-menu {
+            background-color: #ffffff !important;
+        }
+    }
+
+
+    
+    @media (max-width: 767px) {
+        body #td-top-mobile-toggle i,
+        .td-header-wrap .header-search-wrap .td-icon-search {
+            color: #ec1f27 !important;
+        }
+    }
+
+    
+    .post .td-post-header .entry-title {
+        color: #333333;
+    }
+    .td_module_15 .entry-title a {
+        color: #333333;
+    }
+
+    
+    .td-module-meta-info .td-post-author-name a {
+    	color: #333333;
+    }
+
+    
+    .td-post-content,
+    .td-post-content p {
+    	color: #333333;
+    }
+
+    
+    .td-post-content h1,
+    .td-post-content h2,
+    .td-post-content h3,
+    .td-post-content h4,
+    .td-post-content h5,
+    .td-post-content h6 {
+    	color: #333333;
+    }
+
+    
+    .td-page-content p,
+    .td-page-content .td_block_text_with_title,
+    .woocommerce-page .page-description > p {
+    	color: #666666;
+    }
+
+    
+    .top-header-menu > li > a,
+    .td-weather-top-widget .td-weather-now .td-big-degrees,
+    .td-weather-top-widget .td-weather-header .td-weather-city,
+    .td-header-sp-top-menu .td_data_time {
+        font-family:Roboto;
+	
+    }
+    
+    .top-header-menu .menu-item-has-children li a {
+    	font-family:Roboto;
+	
+    }
+    
+    ul.sf-menu > .td-menu-item > a {
+        font-family:Roboto;
+	
+    }
+    
+    .sf-menu ul .td-menu-item a {
+        font-family:Roboto;
+	
+    }
+	
+    .td_mod_mega_menu .item-details a {
+        font-family:Roboto;
+	
+    }
+    
+    .td_mega_menu_sub_cats .block-mega-child-cats a {
+        font-family:Roboto;
+	
+    }
+    
+    .td-mobile-content .td-mobile-main-menu > li > a {
+        font-family:Roboto;
+	
+    }
+    
+    .td-mobile-content .sub-menu a {
+        font-family:Roboto;
+	
+    }
+
+
+
+	
+    .block-title > span,
+    .block-title > a,
+    .widgettitle,
+    .td-trending-now-title,
+    .wpb_tabs li a,
+    .vc_tta-container .vc_tta-color-grey.vc_tta-tabs-position-top.vc_tta-style-classic .vc_tta-tabs-container .vc_tta-tab > a,
+    .td-related-title a,
+    .woocommerce div.product .woocommerce-tabs ul.tabs li a,
+    .woocommerce .product .products h2 {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-author-name a {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-date .entry-date {
+        font-family:Roboto;
+	
+    }
+    
+    .td-module-comments a,
+    .td-post-views span,
+    .td-post-comments a {
+        font-family:Roboto;
+	
+    }
+    
+    .td-big-grid-meta .td-post-category,
+    .td_module_wrap .td-post-category,
+    .td-module-image .td-post-category {
+        font-family:Roboto;
+	
+    }
+    
+    .td-subcat-filter .td-subcat-dropdown a,
+    .td-subcat-filter .td-subcat-list a,
+    .td-subcat-filter .td-subcat-dropdown span {
+        font-family:Roboto;
+	
+    }
+    
+    .td-excerpt {
+        font-family:Roboto;
+	
+    }
+
+
+	
+	.td_module_wrap .td-module-title {
+		font-family:Roboto;
+	
+	}
+     
+	.td_block_trending_now .entry-title a,
+	.td-theme-slider .td-module-title a,
+    .td-big-grid-post .entry-title {
+		font-family:Roboto;
+	
+	}
+    
+	.post .td-post-header .entry-title {
+		font-family:Roboto;
+	
+	}
+    
+    .td-post-template-default .td-post-header .entry-title {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-content p,
+    .td-post-content {
+        font-family:Roboto;
+	font-size:16px;
+	
+    }
+    
+    .post blockquote p,
+    .page blockquote p,
+    .td-post-text-content blockquote p {
+        font-family:Roboto;
+	font-size:16px;
+	font-style:italic;
+	
+    }
+    
+    .post .td_quote_box p,
+    .page .td_quote_box p {
+        font-family:Roboto;
+	
+    }
+    
+    .post .td_pull_quote p,
+    .page .td_pull_quote p {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-content li {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-content h1 {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-content h2 {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-content h3 {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-content h4 {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-content h5 {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-content h6 {
+        font-family:Roboto;
+	
+    }
+
+
+
+
+
+    
+    .post .td-category a {
+        font-family:Roboto;
+	
+    }
+    
+    .post header .td-post-author-name,
+    .post header .td-post-author-name a {
+        font-family:Roboto;
+	
+    }
+    
+    .post header .td-post-date .entry-date {
+        font-family:Roboto;
+	
+    }
+    
+    .post header .td-post-views span,
+    .post header .td-post-comments {
+        font-family:Roboto;
+	
+    }
+    
+    .post .td-post-source-tags a,
+    .post .td-post-source-tags span {
+        font-family:Roboto;
+	
+    }
+    
+    .post .td-post-next-prev-content span {
+        font-family:Roboto;
+	
+    }
+    
+    .post .td-post-next-prev-content a {
+        font-family:Roboto;
+	
+    }
+    
+    .post .author-box-wrap .td-author-name a {
+        font-family:Roboto;
+	
+    }
+    
+    .post .author-box-wrap .td-author-url a {
+        font-family:Roboto;
+	
+    }
+    
+    .post .author-box-wrap .td-author-description {
+        font-family:Roboto;
+	
+    }
+    
+    .td_block_related_posts .entry-title a {
+        font-family:Roboto;
+	
+    }
+    
+    .post .td-post-share-title {
+        font-family:Roboto;
+	
+    }
+    
+	.wp-caption-text,
+	.wp-caption-dd {
+		font-family:Roboto;
+	
+	}
+    
+    .td-post-template-default .td-post-sub-title,
+    .td-post-template-1 .td-post-sub-title,
+    .td-post-template-4 .td-post-sub-title,
+    .td-post-template-5 .td-post-sub-title,
+    .td-post-template-9 .td-post-sub-title,
+    .td-post-template-10 .td-post-sub-title,
+    .td-post-template-11 .td-post-sub-title {
+        font-family:Roboto;
+	
+    }
+    
+    .td-post-template-2 .td-post-sub-title,
+    .td-post-template-3 .td-post-sub-title,
+    .td-post-template-6 .td-post-sub-title,
+    .td-post-template-7 .td-post-sub-title,
+    .td-post-template-8 .td-post-sub-title {
+        font-family:Roboto;
+	
+    }
+
+
+
+
+	
+    .td-page-title,
+    .woocommerce-page .page-title,
+    .td-category-title-holder .td-page-title {
+    	font-family:Roboto;
+	
+    }
+    
+    .td-page-content p,
+    .td-page-content .td_block_text_with_title,
+    .woocommerce-page .page-description > p,
+    .wpb_text_column p {
+    	font-family:Roboto;
+	
+    }
+    
+    .td-page-content h1,
+    .wpb_text_column h1 {
+    	font-family:Roboto;
+	
+    }
+    
+    .td-page-content h2,
+    .wpb_text_column h2 {
+    	font-family:Roboto;
+	
+    }
+    
+    .td-page-content h3,
+    .wpb_text_column h3 {
+    	font-family:Roboto;
+	
+    }
+    
+    .td-page-content h4,
+    .wpb_text_column h4 {
+    	font-family:Roboto;
+	
+    }
+    
+    .td-page-content h5,
+    .wpb_text_column h5 {
+    	font-family:Roboto;
+	
+    }
+    
+    .td-page-content h6,
+    .wpb_text_column h6 {
+    	font-family:Roboto;
+	
+    }
+
+
+
+
+    
+	.footer-text-wrap {
+		font-family:Roboto;
+	
+	}
+	
+	.td-sub-footer-copy {
+		font-family:Roboto;
+	
+	}
+	
+	.td-sub-footer-menu ul li a {
+		font-family:Roboto;
+	
+	}
+
+
+
+
+	
+    .entry-crumbs a,
+    .entry-crumbs span,
+    #bbpress-forums .bbp-breadcrumb a,
+    #bbpress-forums .bbp-breadcrumb .bbp-breadcrumb-current {
+    	font-family:Roboto;
+	
+    }
+    
+    .category .td-category a {
+    	font-family:Roboto;
+	
+    }
+    
+    .td-trending-now-display-area .entry-title {
+    	font-family:Roboto;
+	
+    }
+    
+    .page-nav a,
+    .page-nav span {
+    	font-family:Roboto;
+	
+    }
+    
+    #td-outer-wrap span.dropcap {
+    	font-family:Roboto;
+	
+    }
+    
+    .widget_archive a,
+    .widget_calendar,
+    .widget_categories a,
+    .widget_nav_menu a,
+    .widget_meta a,
+    .widget_pages a,
+    .widget_recent_comments a,
+    .widget_recent_entries a,
+    .widget_text .textwidget,
+    .widget_tag_cloud a,
+    .widget_search input,
+    .woocommerce .product-categories a,
+    .widget_display_forums a,
+    .widget_display_replies a,
+    .widget_display_topics a,
+    .widget_display_views a,
+    .widget_display_stats {
+    	font-family:Roboto;
+	
+    }
+    
+	input[type="submit"],
+	.td-read-more a,
+	.vc_btn,
+	.woocommerce a.button,
+	.woocommerce button.button,
+	.woocommerce #respond input#submit {
+		font-family:Roboto;
+	
+	}
+	
+    body, p {
+    	font-family:Roboto;
+	
+    }
+</style>
+
+<script type="text/javascript" src="https://topdev.vn/challenge/network/topdevnetwork.js"></script>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.5&appId=580972292069229";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</body>
+</html>
+<!-- Dynamic page generated in 0.999 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-11-07 01:27:35 -->
+
+<!-- Compression = gzip -->
+<!-- super cache -->

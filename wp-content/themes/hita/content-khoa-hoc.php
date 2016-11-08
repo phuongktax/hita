@@ -1,6 +1,6 @@
 
 
-<div class="col-sm-12 col-md-12 col-lg-6">
+<div class="col-sm-12 col-md-6 col-lg-6 col-sx-6">
     <div class="ts-wrapper">
         <div class="ts-special-offer">
             <!-- <a href="course-view_php.html" > -->
@@ -18,7 +18,7 @@
                     <!-- <img src="2016/03/featuredimage6.jpg" style="height: 120px;">  -->
                     <img src="<?php echo get_field( 'pic');?>" class="img-responsive" alt="Hình đại diện khóa học" style="height: 120px;">                                             
                 </div>
-                <div class="col-sm-12 col-sx-12  col-md-7 col-lg-7">
+                <div class="col-sm-12 col-sx-12  col-md-12 col-lg-7">
                     <ul>
                         <!-- <li>Tên lớp học: PHP-K1</li> -->
                         <!-- <li>Giảng viên: Nguyễn Văn Công</li>    -->

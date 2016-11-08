@@ -4,16 +4,18 @@
         <div class="container">
             <div class="col-sm-12  ">
                 <div class="ts-section-title   companies-cloud-top text-xs-center">
-                    <h3>Đối Tác</h3>
+                    <h3 style="
+    margin-bottom: 50px; */
+">ĐỐI TÁC CỦA HITA</h3>
                 </div>
                 <div class="ts-client-list">
                     <ul>
-                        <li class="client-item"><img height="95" src="<?php echo get_template_directory_uri(); ?>/images/partners/microsoft.png" class="attachment-client-work" alt="client-1"/></li>
-                        <li class="client-item"><img height="95" src="<?php echo get_template_directory_uri(); ?>/images/partners/Hanu.png" class="attachment-client-work" alt="client-2"/></li>
-                        <li class="client-item"><img height="95" src="<?php echo get_template_directory_uri(); ?>/images/partners/FIT.png" class="attachment-client-work" alt="client-3"/></li>
-                        <li class="client-item"><img height="95" src="<?php echo get_template_directory_uri(); ?>/images/partners/partner4.png" class="attachment-client-work" alt="client-3"/></li>
-                        <li class="client-item"><img height="95" src="<?php echo get_template_directory_uri(); ?>/images/partners/partner5.png" class="attachment-client-work" alt="client-3"/></li>
-                        <li class="client-item"><img height="95" src="<?php echo get_template_directory_uri(); ?>/images/partners/partner6.png" class="attachment-client-work" alt="client-3"/></li>
+                        <li class="client-item"><img height="60" src="<?php echo get_template_directory_uri(); ?>/images/partners/smart.png" class="attachment-client-work" alt="client-1"/></li>
+                        <li class="client-item"><img height="60" src="<?php echo get_template_directory_uri(); ?>/images/partners/nextop-co-ltd-logo-170-151.jpg" class="attachment-client-work" alt="client-2"/></li>
+                        <li class="client-item"><img height="60" src="<?php echo get_template_directory_uri(); ?>/images/partners/logo.png" class="attachment-client-work" alt="client-3"/></li>
+                        <li class="client-item"><img height="60" src="<?php echo get_template_directory_uri(); ?>/images/partners/IFIS_Logo.png" class="attachment-client-work" alt="client-3"/></li>
+                        <li class="client-item"><img height="60" src="<?php echo get_template_directory_uri(); ?>/images/partners/hack.png" class="attachment-client-work" alt="client-3"/></li>
+                        <li class="client-item"><img height="60" src="<?php echo get_template_directory_uri(); ?>/images/partners/logo-itjapan.png" class="attachment-client-work" alt="client-3"/></li>
                     </ul>
                 </div>
             </div>
@@ -45,10 +47,12 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-6">
                         <div class="ts-company-info ">
-                            <h3 class="title">Giới Thiệu</h3>
-                            <p>Đào tạo lập trình PHP, Android, iOS</p>
-                            <p><span>A : CT29-2 Town Hoang Dao Thuy street, Hanoi- Vietnam</span></p>
-                            <p><span>E : </span><a href="mailto:info@codelovers.vn"><span class="__cf_email__" data-cfemail="#"></span>info@codelovers.vn</a></p>
+                            <h3 class="title">Thông tin học viện</h3>
+                            <p>407C - Đại học Hà Nội - Nguyễn Trãi - Thanh Xuân</p>
+                            <span>Email</span>: <a href="#"><span class="__cf_email__" data-cfemail="#"></span>
+                            support.hita@hanu.vn</a><br/>
+                            <span>Phone</span>: (+84) 987 654 321<br/>
+                            <span>Fax</span>: (+84) 43- 456-789<br/>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6">
