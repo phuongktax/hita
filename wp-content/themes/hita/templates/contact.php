@@ -25,7 +25,7 @@
                 <div class="ts-contact-form parallax-section">
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-12 col-md-6 col-lg-9">
+                            <div class="col-sm-12 col-md-9 col-lg-9">
                                 <div class="ts-wrapper">
                                 <?php //if(!isset($_POST['foo'])):?>
                                     <div class="ts-wrapper">
@@ -44,7 +44,7 @@
                                 <?php// endif;?>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6 col-lg-3 col-xs-12">
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xs-12">
                                 <aside id="sidebar-right" class="sidebar-right ">
                                      <div id="recent-posts-2" class="module widget_recent_entries">
                                         <h3 class="sidebar_title">Thông tin học viện</h3>
