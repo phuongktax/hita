@@ -1,8 +1,6 @@
 <?php
-update_option( 'siteurl', 'http://localhost/hita/' );
-update_option( 'home', 'http://localhost/hita/' );
-//phần admin của nhân begin
- //hiển thị thêm tên khóa học và ngày bắt đầu trong admin
+// update_option( 'siteurl', 'http://localhost/hita/' );
+// update_option( 'home', 'http://localhost/hita/' );
 add_filter( 'manage_edit-khoa-hoc-lap-trinh_columns', 'my_edit_course_columns' ) ;
 
 function my_edit_course_columns( $columns ) {
